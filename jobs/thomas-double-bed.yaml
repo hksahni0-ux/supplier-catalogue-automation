@@ -1,0 +1,10 @@
+# Third product, no code changes: same supplier format as Richard.
+# FCI built this one by hand (templates/), so it doubles as an accuracy check.
+brand: cattelan-italia
+model: Thomas
+supplier_name: THOMAS
+product_type: Double Bed
+category_code: FUR-BED-DB
+sku: cattelan-italia-806
+supplier_url: "https://www.cattelanitalia.com/en/products/756AD2EB-2364-46CD-882C-3D0A42386CE2?c=30"
+fci_url: "https://www.fcilondon.co.uk/products/thomas-double-bed-by-cattelan-italia.html"

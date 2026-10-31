@@ -1,0 +1,133 @@
+{
+  "product": "Burt Corner Sofa",
+  "sku": "fiera-collection-043",
+  "generated": "2026-10-31 22:57 UTC",
+  "base_price": 1650,
+  "price_range": [
+    1650,
+    4073
+  ],
+  "combinations": 768,
+  "attributes": {
+    "Size": 4,
+    "Cover": 192,
+    "Orientation": 2,
+    "Feet": 4,
+    "Contrast Stitching": 11,
+    "Comfort": 2
+  },
+  "images_kept": 3,
+  "images_skipped": 0,
+  "swatches": {
+    "reused from FCI": 162
+  },
+  "copy_source": "ai",
+  "manual_inputs": {
+    "brand": "fiera-collection",
+    "model": "Burt",
+    "supplier_name": "BERTE' FF",
+    "product_type": "Corner Sofa",
+    "category_code": "FUR-SEA-SOF",
+    "sku": "fiera-collection-043",
+    "supplier_url": "https://francoferri.it/en/berte/"
+  },
+  "flags": [
+    {
+      "severity": "warning",
+      "field": "Cover",
+      "message": "Aquaclean (Cat.84) lists no colours ('All colours See Book'); add them from the supplier's sample book",
+      "source": "Leather and Fabric Swatches - Feet Finish - Contrast Stitching - Franco Ferri Italia 2025.xls"
+    },
+    {
+      "severity": "warning",
+      "field": "catcode",
+      "message": "category code 'FUR-SEA-SOF' is inferred from FCI's naming pattern; confirm it exists in Frame",
+      "source": "job"
+    },
+    {
+      "severity": "warning",
+      "field": "swatches",
+      "message": "3 FCI swatch images were not reused because they name a different colour than the current card; a new image is needed: 12-MUSTARD-BOSTON (FCI image is 'mostaza', card now says 'mustard'); 15-FORREST-GREEN-BOSTON (FCI image is 'forest', card now says 'forrest green'); 16-LIGHT-TEAL-BOSTON (FCI image is 'sky', card now says 'light teal')",
+      "source": "https://www.fcilondon.co.uk/products/burt-corner-sofa-by-fiera-collection.html"
+    },
+    {
+      "severity": "warning",
+      "field": "swatches",
+      "message": "31 options have no swatch image on FCI's server or from the supplier; image left as planned path: 12-LIGHT-GREY-GIOTTO, 116-BURGUNDY-VELVET, 30220-BEIGE-MISSOURI, 30221-GREY-MISSOURI, 30222-BROWN-MISSOURI, 30223-GREEN-MISSOURI, 30224-WHITE-MISSOURI, 30225-BORDEAUX-MISSOURI, 30360-BRONZE-RIGOLETTO, 30361-COGNAC-RIGOLETTO ...",
+      "source": "https://www.fcilondon.co.uk/products/burt-corner-sofa-by-fiera-collection.html"
+    },
+    {
+      "severity": "info",
+      "field": "Cover",
+      "message": "Cat.80 is priced in the list but the swatch card has no materials for it",
+      "source": "price list block 'BERTE' FF' (row 519)"
+    },
+    {
+      "severity": "info",
+      "field": "Cover",
+      "message": "Cat.25 is priced in the list but the swatch card has no materials for it",
+      "source": "price list block 'BERTE' FF' (row 519)"
+    },
+    {
+      "severity": "info",
+      "field": "Cover",
+      "message": "Cat.35 is priced in the list but the swatch card has no materials for it",
+      "source": "price list block 'BERTE' FF' (row 519)"
+    },
+    {
+      "severity": "info",
+      "field": "description",
+      "message": "AI-written copy; spot-check tone before publishing",
+      "source": "private/nvidia/nemotron-3.5-super-120b-a12b"
+    },
+    {
+      "severity": "info",
+      "field": "images",
+      "message": "technical sheet not used as an image: it carries the supplier's branding (logo, model name, address)",
+      "source": "https://francoferri.it/pdf/berte.pdf"
+    }
+  ],
+  "sources": [
+    "2026 - Franco Ferri GBP Price List IW - FCI Clipper Design - June 2026.xlsm (row 519)",
+    "Leather and Fabric Swatches - Feet Finish - Contrast Stitching - Franco Ferri Italia 2025.xls",
+    "https://francoferri.it/en/berte/",
+    "https://francoferri.it/pdf/berte.pdf"
+  ],
+  "csv_files": {
+    "product": "csv/fiera-collection-043-product-upload.csv",
+    "categories": "csv/fiera-collection-043-categories.csv",
+    "images": "csv/fiera-collection-043-images.csv",
+    "attributes": "csv/fiera-collection-043-attributes.csv",
+    "prices": "csv/fiera-collection-043-prices.csv",
+    "details": "csv/fiera-collection-043-details.csv"
+  },
+  "images": [
+    {
+      "source": "https://francoferri.it/wp-content/uploads/2025/10/Berte2.jpg",
+      "status": "kept",
+      "file": "fiera-collection/burt-corner-sofa-by-fiera-collection-1.jpg",
+      "size": "1592x1592",
+      "source_size": "1920x1280",
+      "bytes": "216088",
+      "fidelity_db": "59.8"
+    },
+    {
+      "source": "https://francoferri.it/wp-content/uploads/2025/10/Berte3.jpg",
+      "status": "kept",
+      "file": "fiera-collection/burt-corner-sofa-by-fiera-collection-2.jpg",
+      "size": "1664x1664",
+      "source_size": "1920x1280",
+      "bytes": "152553",
+      "fidelity_db": "61.4"
+    },
+    {
+      "source": "https://francoferri.it/wp-content/uploads/2025/10/berte1.jpg",
+      "status": "kept",
+      "file": "fiera-collection/burt-corner-sofa-by-fiera-collection-3.jpg",
+      "size": "1920x1920",
+      "source_size": "1920x1920",
+      "bytes": "446257",
+      "fidelity_db": "61.2"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.env
+# Supplier files are large and belong to FCI; keep them out of git.
+supplier_inputs/
+# HTTP cache built at run time
+.cache/
+# Outputs: keep the CSVs, reports and processed images; the large re-creatable sets stay out.
+output/*/originals/
+output/*/swatches/

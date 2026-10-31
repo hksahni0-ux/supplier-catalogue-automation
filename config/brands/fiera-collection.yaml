@@ -1,0 +1,21 @@
+# Naustro Fiera Collection (formerly Franco Ferri): GBP module price list (.xlsm),
+# text-only swatch card (.xls), product pages and technical sheets on francoferri.it.
+brand: Naustro Fiera Collection
+supplier: franco_ferri          # module in src/fci/suppliers.py
+brand_slug: fiera-collection
+url_brand: Fiera Collection     # FCI URLs/titles read "... by Fiera Collection"
+currency: GBP
+
+price_list:
+  adapter: franco_ferri_xlsm
+  file: "2026 - Franco Ferri GBP Price List IW - FCI Clipper Design - June 2026.xlsm"
+
+swatches:
+  adapter: franco_ferri_swatch_card
+  file: "Leather and Fabric Swatches - Feet Finish - Contrast Stitching - Franco Ferri Italia 2025.xls"
+
+website:
+  adapter: franco_ferri_web
+  # The technical sheet shows Franco Ferri's logo, model name and address, while FCI sells the
+  # range as Naustro Fiera under its own names, so it is not used as a product image.
+  technical_sheet_as_image: false

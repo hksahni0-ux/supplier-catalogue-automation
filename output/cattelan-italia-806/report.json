@@ -1,0 +1,120 @@
+{
+  "product": "Thomas Double Bed",
+  "sku": "cattelan-italia-806",
+  "generated": "2026-10-31 22:58 UTC",
+  "base_price": 4002,
+  "price_range": [
+    4002,
+    6857
+  ],
+  "combinations": 560,
+  "attributes": {
+    "Size": 5,
+    "Cover": 112,
+    "Structure": 2
+  },
+  "images_kept": 7,
+  "images_skipped": 1,
+  "swatches": {
+    "downloaded": 114
+  },
+  "copy_source": "ai",
+  "manual_inputs": {
+    "brand": "cattelan-italia",
+    "model": "Thomas",
+    "supplier_name": "THOMAS",
+    "product_type": "Double Bed",
+    "category_code": "FUR-BED-DB",
+    "sku": "cattelan-italia-806",
+    "supplier_url": "https://www.cattelanitalia.com/en/products/756AD2EB-2364-46CD-882C-3D0A42386CE2?c=30"
+  },
+  "flags": [
+    {
+      "severity": "info",
+      "field": "description",
+      "message": "AI-written copy; spot-check tone before publishing",
+      "source": "private/nvidia/nemotron-3.5-super-120b-a12b"
+    }
+  ],
+  "sources": [
+    "CATTELAN ITALIA p.list 05-26 EUR Vat excl.pdf p.361",
+    "https://www.cattelanitalia.com/en/products/756AD2EB-2364-46CD-882C-3D0A42386CE2?c=30",
+    "https://www.cattelanitalia.com/en/finishes/productList/0"
+  ],
+  "csv_files": {
+    "product": "csv/cattelan-italia-806-product-upload.csv",
+    "categories": "csv/cattelan-italia-806-categories.csv",
+    "images": "csv/cattelan-italia-806-images.csv",
+    "attributes": "csv/cattelan-italia-806-attributes.csv",
+    "prices": "csv/cattelan-italia-806-prices.csv",
+    "details": "csv/cattelan-italia-806-details.csv"
+  },
+  "images": [
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/26c93be1-b0ff-4d09-ac29-5c31058e7ff9.jpg?t=1713282542",
+      "status": "skipped: duplicate of https://download.cattelanitalia.com/multimedia/generic/e6fb1d80-ef1e-4f74-a156-ef38f83c5b4b.jpg?t=1713282554"
+    },
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/e6fb1d80-ef1e-4f74-a156-ef38f83c5b4b.jpg?t=1713282554",
+      "status": "kept",
+      "file": "cattelan-italia/thomas-double-bed-by-cattelan-italia-1.jpg",
+      "size": "2362x2362",
+      "source_size": "2362x3543",
+      "bytes": "1013566",
+      "fidelity_db": "58.4"
+    },
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/df6dbf73-659f-4337-aa5e-0cc29d71184f.jpg?t=1745830117",
+      "status": "kept",
+      "file": "cattelan-italia/thomas-double-bed-by-cattelan-italia-2.jpg",
+      "size": "2362x2362",
+      "source_size": "3543x2362",
+      "bytes": "1329779",
+      "fidelity_db": "56.0"
+    },
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/bbd93a74-cd8b-4cf8-a5f1-f8cacf9dc881.jpg?t=1713282549",
+      "status": "kept",
+      "file": "cattelan-italia/thomas-double-bed-by-cattelan-italia-3.jpg",
+      "size": "2362x2362",
+      "source_size": "3543x2362",
+      "bytes": "1210927",
+      "fidelity_db": "58.4"
+    },
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/b2d4582a-6c2a-4951-bc14-d852639d7ebe.jpg?t=1713282546",
+      "status": "kept",
+      "file": "cattelan-italia/thomas-double-bed-by-cattelan-italia-4.jpg",
+      "size": "2362x2362",
+      "source_size": "2362x3543",
+      "bytes": "900293",
+      "fidelity_db": "64.7"
+    },
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/f68dc879-5976-43bd-87eb-26dbe4d2cd23.jpg?t=1713282555",
+      "status": "kept",
+      "file": "cattelan-italia/thomas-double-bed-by-cattelan-italia-5.jpg",
+      "size": "2362x2362",
+      "source_size": "2362x3543",
+      "bytes": "1038093",
+      "fidelity_db": "56.6"
+    },
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/d81d9d97-05ff-4216-8368-4f4985d9651d.jpg?t=1719910102",
+      "status": "kept",
+      "file": "cattelan-italia/thomas-double-bed-by-cattelan-italia-6.jpg",
+      "size": "2362x2362",
+      "source_size": "3543x2362",
+      "bytes": "571726",
+      "fidelity_db": "62.0"
+    },
+    {
+      "source": "technical drawing (price list / technical sheet)",
+      "status": "kept",
+      "file": "cattelan-italia/thomas-double-bed-by-cattelan-italia-7.jpg",
+      "size": "1384x1384",
+      "source_size": "2481x1292",
+      "bytes": "120520"
+    }
+  ]
+}

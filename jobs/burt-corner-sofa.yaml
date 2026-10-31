@@ -1,0 +1,31 @@
+# Burt Corner Sofa = Franco Ferri "BERTE' FF", renamed by FCI for the Naustro Fiera range.
+brand: fiera-collection
+model: Burt
+supplier_name: "BERTE' FF"
+product_type: Corner Sofa
+category_code: FUR-SEA-SOF     # inferred from FCI's code pattern (FUR-BED-DB, ACC-MIR); to confirm
+category_confirmed: false
+sku: fiera-collection-043      # existing FCI code (live page)
+supplier_url: "https://francoferri.it/en/berte/"
+fci_url: "https://www.fcilondon.co.uk/products/burt-corner-sofa-by-fiera-collection.html"
+
+# Standard layouts: the four example compositions on the BERTE' technical sheet
+# (francoferri.it/pdf/berte.pdf). Module codes are the price-list codes.
+layouts:
+  - name: "Corner - W.305 X D.305 X H.95 cm"
+    modules: ["0168", "0125", "0401", "0125", "0169"]
+  - name: "Corner with Terminal - W.305 X D.281 X H.95 cm"
+    modules: ["0168", "0125", "0401", "0145"]
+  - name: "Maxi Chaise - W.324 X D.161 X H.95 cm"
+    modules: ["0172", "A138", "0285"]
+  - name: "Chaise - W.300 X D.161 X H.95 cm"
+    modules: ["0246", "0125", "0169"]
+
+# Left/right module pairs; the pipeline checks a mirrored layout costs the same.
+mirror_pairs: [["0168", "0169"], ["0171", "0172"], ["0285", "0286"], ["0245", "0246"], ["0145", "0146"]]
+
+# Metal feet finishes shown on the technical sheet.
+feet: ["38", "42", "47", "71"]
+
+dropdowns:
+  Comfort: [Soft, Hard]

@@ -1,0 +1,152 @@
+{
+  "product": "Richard Double Bed",
+  "sku": "cattelan-italia-889",
+  "generated": "2026-10-31 22:58 UTC",
+  "base_price": 4121,
+  "price_range": [
+    4121,
+    8769
+  ],
+  "combinations": 2340,
+  "attributes": {
+    "Size": 10,
+    "Cover": 356
+  },
+  "images_kept": 6,
+  "images_skipped": 1,
+  "swatches": {
+    "downloaded": 356
+  },
+  "copy_source": "ai",
+  "manual_inputs": {
+    "brand": "cattelan-italia",
+    "model": "Richard",
+    "supplier_name": "RICHARD",
+    "product_type": "Double Bed",
+    "category_code": "FUR-BED-DB",
+    "sku": "cattelan-italia-889",
+    "supplier_url": "https://www.cattelanitalia.com/en/products/C742E2EA-1F88-45F9-B990-EAE58E5347CF?c=30"
+  },
+  "flags": [
+    {
+      "severity": "warning",
+      "field": "Size",
+      "message": "sizes A and B (standard) have identical printed dimensions; they differ only in the drawing (e.g. mattress size), so add that to the option name by hand",
+      "source": "CATTELAN ITALIA p.list 05-26 EUR Vat excl.pdf p.358"
+    },
+    {
+      "severity": "warning",
+      "field": "Size",
+      "message": "sizes A and B (Pull-up slats with container) have identical printed dimensions; they differ only in the drawing (e.g. mattress size), so add that to the option name by hand",
+      "source": "CATTELAN ITALIA p.list 05-26 EUR Vat excl.pdf p.358"
+    },
+    {
+      "severity": "info",
+      "field": "description",
+      "message": "AI-written copy; spot-check tone before publishing",
+      "source": "private/nvidia/nemotron-3.5-super-120b-a12b"
+    },
+    {
+      "severity": "info",
+      "field": "price",
+      "message": "244 covers not priced for 'A - W.245 X D.234 X H.102 cm Pull-up slats with container' in the price list; those combinations are left out, not estimated",
+      "source": "CATTELAN ITALIA p.list 05-26 EUR Vat excl.pdf p.358"
+    },
+    {
+      "severity": "info",
+      "field": "price",
+      "message": "244 covers not priced for 'B - W.245 X D.234 X H.102 cm Pull-up slats with container' in the price list; those combinations are left out, not estimated",
+      "source": "CATTELAN ITALIA p.list 05-26 EUR Vat excl.pdf p.358"
+    },
+    {
+      "severity": "info",
+      "field": "price",
+      "message": "244 covers not priced for 'D - W.265 X D.234 X H.102 cm Pull-up slats with container' in the price list; those combinations are left out, not estimated",
+      "source": "CATTELAN ITALIA p.list 05-26 EUR Vat excl.pdf p.358"
+    },
+    {
+      "severity": "info",
+      "field": "price",
+      "message": "244 covers not priced for 'E - W.285 X D.234 X H.102 cm Pull-up slats with container' in the price list; those combinations are left out, not estimated",
+      "source": "CATTELAN ITALIA p.list 05-26 EUR Vat excl.pdf p.358"
+    },
+    {
+      "severity": "info",
+      "field": "price",
+      "message": "244 covers not priced for 'G - W.285 X D.237 X H.102 cm Pull-up slats with container' in the price list; those combinations are left out, not estimated",
+      "source": "CATTELAN ITALIA p.list 05-26 EUR Vat excl.pdf p.358"
+    }
+  ],
+  "sources": [
+    "CATTELAN ITALIA p.list 05-26 EUR Vat excl.pdf p.358",
+    "https://www.cattelanitalia.com/en/products/C742E2EA-1F88-45F9-B990-EAE58E5347CF?c=30",
+    "https://www.cattelanitalia.com/en/finishes/productList/0"
+  ],
+  "csv_files": {
+    "product": "csv/cattelan-italia-889-product-upload.csv",
+    "categories": "csv/cattelan-italia-889-categories.csv",
+    "images": "csv/cattelan-italia-889-images.csv",
+    "attributes": "csv/cattelan-italia-889-attributes.csv",
+    "prices": "csv/cattelan-italia-889-prices.csv",
+    "details": "csv/cattelan-italia-889-details.csv"
+  },
+  "images": [
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/9a449954-402c-486b-a00b-b826c6198458.jpg?t=1776433721",
+      "status": "skipped: duplicate of https://download.cattelanitalia.com/multimedia/generic/177c5a06-478f-4d9b-9cf6-7fffa06cd535.jpg?t=1776433717"
+    },
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/177c5a06-478f-4d9b-9cf6-7fffa06cd535.jpg?t=1776433717",
+      "status": "kept",
+      "file": "cattelan-italia/richard-double-bed-by-cattelan-italia-1.jpg",
+      "size": "2362x2362",
+      "source_size": "3543x2362",
+      "bytes": "828680",
+      "fidelity_db": "62.5"
+    },
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/3ba3e30e-8c2d-429f-b722-135f5491790f.jpg?t=1776433718",
+      "status": "kept",
+      "file": "cattelan-italia/richard-double-bed-by-cattelan-italia-2.jpg",
+      "size": "2362x2362",
+      "source_size": "3543x2362",
+      "bytes": "728202",
+      "fidelity_db": "61.5"
+    },
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/568adbe3-0589-4814-a950-200ebfed5971.jpg?t=1776433719",
+      "status": "kept",
+      "file": "cattelan-italia/richard-double-bed-by-cattelan-italia-3.jpg",
+      "size": "2362x2362",
+      "source_size": "3543x2362",
+      "bytes": "1194518",
+      "fidelity_db": "62.9"
+    },
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/be8f835c-60a7-461c-a673-2b31bdb0ea32.jpg?t=1776433722",
+      "status": "kept",
+      "file": "cattelan-italia/richard-double-bed-by-cattelan-italia-4.jpg",
+      "size": "2362x2362",
+      "source_size": "2362x3543",
+      "bytes": "958518",
+      "fidelity_db": "62.7"
+    },
+    {
+      "source": "https://download.cattelanitalia.com/multimedia/generic/54a3312b-4588-46af-ab72-33ebbe9ebe92.jpg?t=1776433719",
+      "status": "kept",
+      "file": "cattelan-italia/richard-double-bed-by-cattelan-italia-5.jpg",
+      "size": "2362x2362",
+      "source_size": "2362x3543",
+      "bytes": "1153008",
+      "fidelity_db": "63.0"
+    },
+    {
+      "source": "technical drawing (price list / technical sheet)",
+      "status": "kept",
+      "file": "cattelan-italia/richard-double-bed-by-cattelan-italia-6.jpg",
+      "size": "2288x2288",
+      "source_size": "2481x1194",
+      "bytes": "160100"
+    }
+  ]
+}

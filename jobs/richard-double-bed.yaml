@@ -1,0 +1,10 @@
+# One job = one product. These are the only facts a person supplies;
+# everything else is extracted from the supplier's files and website.
+brand: cattelan-italia
+model: Richard                 # FCI product name (the supplier's "RICHARD")
+supplier_name: RICHARD         # title as printed in the price list
+product_type: Double Bed       # FCI naming: "<model> <product type>"
+category_code: FUR-BED-DB      # FCI category (Furniture > Bedroom > Double Beds)
+sku: cattelan-italia-889       # existing FCI code; new products take the next free number
+supplier_url: "https://www.cattelanitalia.com/en/products/C742E2EA-1F88-45F9-B990-EAE58E5347CF?c=30"
+fci_url: "https://www.fcilondon.co.uk/products/richard-double-bed-by-cattelan-italia.html"

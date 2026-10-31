@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: uv sync --locked
+      - name: Lint
+        run: uv run ruff check src tests && uv run ruff format --check src tests
+      - name: Type check
+        run: uv run mypy src
+      - name: Unit tests
+        run: uv run pytest tests/unit --cov=fci --cov-report=term-missing
+      - name: Integration tests (offline fixtures; real-file tests skip without supplier_inputs/)
+        run: uv run pytest tests/integration
+      - name: Dependency audit
+        run: uv run pip-audit
+      - name: Security scan
+        run: uv run bandit -q -r src

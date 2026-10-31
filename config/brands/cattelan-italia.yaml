@@ -1,0 +1,54 @@
+# Cattelan Italia: euro PDF price list, product pages on cattelanitalia.com,
+# upholstery swatches from the site's public finishes catalogue.
+brand: Cattelan Italia
+supplier: cattelan            # module in src/fci/suppliers.py
+brand_slug: cattelan-italia
+currency: EUR
+
+price_list:
+  adapter: cattelan_pdf
+  file: "CATTELAN ITALIA p.list 05-26 EUR Vat excl.pdf"
+
+website:
+  adapter: cattelan_web
+
+swatches:
+  adapter: cattelan_finishes
+  endpoint: "https://www.cattelanitalia.com/en/finishes/productList/0"
+  # finishes catalogue category ids: 70 = Chair / Bed Upholstery, 119 = Sofas Upholstery
+  categories: [70, 119]
+  # Each group: which catalogue entries belong to it, the FCI swatch folder and the
+  # "grouping" label used in the attributes CSV (labels follow the Thomas sample).
+  groups:
+    synthetic-leather: {category: 70, material_id: 73, folder: synthetic-leather, label: Synthetic Leather}
+    fabric:            {category: 70, material_id: 76, folder: fabrics, label: Fabric}
+    micro-nubuck:      {category: 70, material_id: 75, folder: micro-nubuck, label: Micro Nubuck}
+    soft-leather:      {category: 70, material_id: 71, folder: soft-leather, label: Soft Leather}
+    glove:             {category: 70, material_id: 72, folder: "", label: Soft Leather Glove}   # FCI keeps glove swatches at the top level
+    # Sofa fabrics: the first letter of the code is the price group (A005 -> Fabric A).
+    sofa-fabric-a:     {category: 119, material_id: 120, code_prefix: A, folder: sofa-fabrics, label: Sofa Fabric A}
+    sofa-fabric-b:     {category: 119, material_id: 120, code_prefix: B, folder: sofa-fabrics, label: Sofa Fabric B}
+    sofa-fabric-d:     {category: 119, material_id: 120, code_prefix: D, folder: sofa-fabrics, label: Sofa Fabric D}
+    sofa-fabric-f:     {category: 119, material_id: 120, code_prefix: F, folder: sofa-fabrics, label: Sofa Fabric F}
+    sofa-glove:        {category: 119, material_id: 121, style: glove, folder: sofa-leathers, label: Sofa Leather Glove}
+    sofa-perfetto:     {category: 119, material_id: 121, style: perfetto, folder: sofa-leathers, label: Sofa Leather Perfetto}
+    sofa-nabuk:        {category: 119, material_id: 121, style: nabuk, folder: sofa-leathers, label: Sofa Leather Nabuk}
+    sofa-magnifica:    {category: 119, material_id: 121, style: magnifica, folder: sofa-leathers, label: Sofa Leather Magnifica}
+
+# Price-list column header (normalised, case-insensitive regex) -> swatch groups priced by it.
+price_columns:
+  - {header: "^synthetic leather / c\\.o\\.m\\.$", groups: [synthetic-leather]}
+  - {header: "^fabric / micro nubuck / c\\.o\\.l$", groups: [fabric, micro-nubuck]}
+  - {header: "^soft leather$", groups: [soft-leather]}
+  - {header: "^soft leather glove$", groups: [glove]}
+  - {header: "^fabric a sofas$", groups: [sofa-fabric-a]}
+  - {header: "^fabric b sofas$", groups: [sofa-fabric-b]}
+  - {header: "^fabric d sofas$", groups: [sofa-fabric-d]}
+  - {header: "^fabric f sofas$", groups: [sofa-fabric-f]}
+  - {header: "^soft leather glove / perfetto sofas$", groups: [sofa-glove, sofa-perfetto]}
+  - {header: "^soft leather nabuk / magnifica sofas$", groups: [sofa-nabuk, sofa-magnifica]}
+
+# A note printed above a price table that lists finish codes becomes a swatch attribute
+# that does not change the price, e.g. Thomas "Feet GFM18 / GFM69" -> Structure.
+qualifier_attributes:
+  Feet: {attribute: Structure, category: 63, grouping: Metal, folder: ""}   # top level, as FCI does
