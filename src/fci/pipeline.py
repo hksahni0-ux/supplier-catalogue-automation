@@ -220,7 +220,7 @@ def _validate(record: ProductRecord, job: Job) -> None:
 
 
 def run_job(
-    job_path: Path,
+    job_path: Path | Job,
     *,
     inputs: Path,
     config: Path,
@@ -230,7 +230,7 @@ def run_job(
     client: Any = None,
     images: bool = True,
 ) -> RunResult:
-    job = load_job(job_path)
+    job = job_path if isinstance(job_path, Job) else load_job(job_path)
     brand = load_brand(config / "brands" / f"{job.brand}.yaml")
     supplier = SUPPLIERS[brand.raw["supplier"]]
     data = supplier(job, brand, Context(inputs, http))
@@ -254,9 +254,10 @@ def run_job(
         if any(o.swatch and o.swatch.source_image for o in swatch_options):
             swatch_counts["downloaded"] = _cattelan_style_swatches(swatch_options, http, out, flags)
         else:
-            swatch_counts["reused from FCI"] = _reuse_fci_swatches(
-                swatch_options, job.options.get("fci_url"), http, flags
-            )
+            fci_url = job.options.get("fci_url")
+            swatch_counts["reused from FCI"] = _reuse_fci_swatches(swatch_options, fci_url, http, flags)
+            if fci_url:
+                data.sources.append(fci_url)
     image_count = (
         sum(1 for m in manifest if m["status"] == "kept")
         if images

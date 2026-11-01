@@ -1,4 +1,5 @@
-# Third product, no code changes: same supplier format as Richard.
+# Third product, same supplier format as Richard. Its table adds a feet-finish note,
+# read by the general qualifier_attributes rule in the brand config.
 # FCI built this one by hand (templates/), so it doubles as an accuracy check.
 brand: cattelan-italia
 model: Thomas

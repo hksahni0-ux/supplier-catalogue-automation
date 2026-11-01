@@ -31,6 +31,11 @@ class Brand:
     qualifier_attributes: dict[str, dict[str, Any]] = field(default_factory=dict)
     raw: dict[str, Any] = field(default_factory=dict)
 
+    @property
+    def drive_folder(self) -> str:
+        """Its subfolder of Price lists in Drive: `drive_folder:` if set, else the brand name."""
+        return str(self.raw.get("drive_folder") or self.name)
+
     def groups_for_column(self, header: str) -> tuple[str, ...] | None:
         normalised = re.sub(r"\s+", " ", header).strip().lower()
         for column in self.price_columns:

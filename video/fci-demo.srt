@@ -1,0 +1,399 @@
+1
+00:00:01,732 --> 00:00:02,727
+3 products.
+
+2
+00:00:02,886 --> 00:00:04,313
+6 upload sheets each.
+
+3
+00:00:04,461 --> 00:00:05,288
+1 command.
+
+4
+00:00:05,434 --> 00:00:07,223
+And an assistant your team can ask.
+
+5
+00:00:07,369 --> 00:00:09,542
+This is supplier catalogue automation,
+
+6
+00:00:09,569 --> 00:00:11,141
+built for FCI London.
+
+7
+00:00:11,795 --> 00:00:12,550
+By hand,
+
+8
+00:00:12,660 --> 00:00:14,532
+the Richard bed means finding it in
+
+9
+00:00:14,295 --> 00:00:16,961
+a 373-page price list,
+
+10
+00:00:16,999 --> 00:00:20,134
+then typing 2,340 price rows.
+
+11
+00:00:20,813 --> 00:00:21,339
+Here,
+
+12
+00:00:21,306 --> 00:00:23,238
+the suppliers' own files go in:
+
+13
+00:00:23,277 --> 00:00:25,270
+Cattelan's PDF price list,
+
+14
+00:00:25,272 --> 00:00:27,830
+and Franco Ferri's spreadsheet and swatch card.
+
+15
+00:00:27,976 --> 00:00:29,933
+A short job file names the product,
+
+16
+00:00:29,972 --> 00:00:31,844
+and 1 command does the rest.
+
+17
+00:00:32,495 --> 00:00:34,861
+Richard's page holds 70 prices:
+
+18
+00:00:34,899 --> 00:00:35,991
+5 sizes,
+
+19
+00:00:35,945 --> 00:00:37,217
+10 cover columns,
+
+20
+00:00:37,195 --> 00:00:38,419
+and a storage version.
+
+21
+00:00:38,565 --> 00:00:42,385
+Cattelan's online catalogue supplies the 356 colours
+
+22
+00:00:42,147 --> 00:00:43,575
+behind those columns.
+
+23
+00:00:43,721 --> 00:00:47,397
+So 70 prices become 2,340 rows,
+
+24
+00:00:47,351 --> 00:00:48,599
+copied exactly.
+
+25
+00:00:49,254 --> 00:00:50,369
+Burt is modular,
+
+26
+00:00:50,384 --> 00:00:52,172
+so each layout is the sum of
+
+27
+00:00:51,934 --> 00:00:52,917
+its modules.
+
+28
+00:00:53,076 --> 00:00:54,179
+698,
+
+29
+00:00:54,170 --> 00:00:55,753
+plus 320,
+
+30
+00:00:55,804 --> 00:00:57,725
+plus 564,
+
+31
+00:00:57,751 --> 00:00:59,696
+plus 731:
+
+32
+00:00:59,831 --> 00:01:02,317
+£2,313.
+
+33
+00:01:03,012 --> 00:01:05,522
+Photos stay at the supplier's full resolution,
+
+34
+00:01:05,512 --> 00:01:08,094
+cropped square and saved with the supplier's
+
+35
+00:01:07,856 --> 00:01:09,308
+own JPEG settings.
+
+36
+00:01:09,455 --> 00:01:11,135
+Measured against the originals,
+
+37
+00:01:11,101 --> 00:01:14,596
+every photo scores between 56 and 65
+
+38
+00:01:14,358 --> 00:01:15,245
+decibels:
+
+39
+00:01:15,464 --> 00:01:16,628
+visually identical,
+
+40
+00:01:16,690 --> 00:01:17,649
+even zoomed in.
+
+41
+00:01:18,295 --> 00:01:20,155
+Cattelan's swatches are downloaded.
+
+42
+00:01:20,362 --> 00:01:22,162
+Franco Ferri publishes none,
+
+43
+00:01:22,225 --> 00:01:25,420
+so the tool reuses the 162 FCI
+
+44
+00:01:25,374 --> 00:01:26,525
+already hosts,
+
+45
+00:01:26,540 --> 00:01:28,616
+and lists the 34 still needed.
+
+46
+00:01:29,281 --> 00:01:31,814
+NVIDIA's Nemotron writes the descriptions from the
+
+47
+00:01:31,577 --> 00:01:32,872
+supplier's facts,
+
+48
+00:01:32,851 --> 00:01:34,975
+and each one is checked before it's
+
+49
+00:01:34,738 --> 00:01:35,397
+used.
+
+50
+00:01:36,043 --> 00:01:36,786
+To test it,
+
+51
+00:01:36,825 --> 00:01:37,952
+I added Thomas,
+
+52
+00:01:37,894 --> 00:01:39,743
+a bed FCI built by hand.
+
+53
+00:01:39,889 --> 00:01:41,305
+Every size matches,
+
+54
+00:01:41,260 --> 00:01:44,238
+the base price matches FCI's live page,
+
+55
+00:01:44,288 --> 00:01:46,930
+and it found 41 colours FCI still
+
+56
+00:01:46,692 --> 00:01:49,034
+lists that Cattelan no longer offers.
+
+57
+00:01:49,706 --> 00:01:52,311
+The team works in Google Drive Price lists
+
+58
+00:01:52,074 --> 00:01:53,153
+go in a folder,
+
+59
+00:01:53,155 --> 00:01:55,064
+and products are rows in a sheet.
+
+60
+00:01:55,199 --> 00:01:57,011
+A new catalogue is picked up by
+
+61
+00:01:56,773 --> 00:01:57,552
+its name,
+
+62
+00:01:57,566 --> 00:01:58,922
+with no setup change,
+
+63
+00:01:58,888 --> 00:02:00,809
+and every result is saved back to
+
+64
+00:02:00,571 --> 00:02:01,242
+Drive,
+
+65
+00:02:01,196 --> 00:02:01,963
+by date.
+
+66
+00:02:02,624 --> 00:02:04,857
+Each run compares every price with the
+
+67
+00:02:04,619 --> 00:02:05,434
+last one,
+
+68
+00:02:05,545 --> 00:02:07,790
+and writes only the rows that changed,
+
+69
+00:02:07,828 --> 00:02:08,860
+ready to upload.
+
+70
+00:02:09,006 --> 00:02:10,146
+Re-running Thomas:
+
+71
+00:02:10,148 --> 00:02:12,129
+560 unchanged.
+
+72
+00:02:12,770 --> 00:02:14,103
+And anyone can just ask.
+
+73
+00:02:14,261 --> 00:02:16,602
+The assistant answers from the run results,
+
+74
+00:02:16,593 --> 00:02:17,696
+never from memory.
+
+75
+00:02:17,843 --> 00:02:18,514
+Richard,
+
+76
+00:02:18,492 --> 00:02:19,427
+size D,
+
+77
+00:02:19,441 --> 00:02:20,593
+in glove leather:
+
+78
+00:02:20,751 --> 00:02:21,771
+3 prices,
+
+79
+00:02:21,821 --> 00:02:23,321
+each checked against the data.
+
+80
+00:02:23,973 --> 00:02:26,025
+Asking it to re-run a product only
+
+81
+00:02:25,788 --> 00:02:27,012
+proposes the run.
+
+82
+00:02:27,158 --> 00:02:29,656
+Nothing happens until someone presses Confirm.
+
+83
+00:02:29,814 --> 00:02:31,483
+Then it re-prices from Drive,
+
+84
+00:02:31,581 --> 00:02:33,202
+and saves the results back.
+
+85
+00:02:33,855 --> 00:02:35,968
+Anything a person should check goes into
+
+86
+00:02:35,730 --> 00:02:36,545
+a report.
+
+87
+00:02:36,704 --> 00:02:38,913
+One command folds the rows back into
+
+88
+00:02:38,675 --> 00:02:41,029
+the 70 prices on the PDF page
+
+89
+00:02:40,790 --> 00:02:42,026
+for a quick hand check,
+
+90
+00:02:42,064 --> 00:02:45,343
+and 192 tests run on every push.
+
+91
+00:02:45,994 --> 00:02:48,179
+85 to 90 percent of the work,
+
+92
+00:02:48,133 --> 00:02:48,924
+automated.
+
+93
+00:02:49,059 --> 00:02:50,775
+A new product is a row in
+
+94
+00:02:50,537 --> 00:02:51,268
+a sheet,
+
+95
+00:02:51,330 --> 00:02:53,058
+and a new supplier is a new
+
+96
+00:02:52,821 --> 00:02:53,456
+reader.
+
+97
+00:02:54,100 --> 00:02:56,274
+Designed and built by Prateek Sahni.
+
+98
+00:02:56,420 --> 00:02:58,220
+Scan the QR code to visit his
+
+99
+00:02:57,982 --> 00:02:58,749
+website,
+
+100
+00:02:58,788 --> 00:03:00,360
+and explore more of his work.

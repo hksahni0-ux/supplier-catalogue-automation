@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FCI Catalogue Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=block" rel="stylesheet">
+<style>
+/* Look: a furniture spec sheet. Warm stone paper, a faint architectural grid, ink type,
+   terracotta for what matters, brass for totals. Measurements are drawn as dimension lines. */
+:root {
+  --stone: #ECE6DC; --stone-2: #E2DACD; --paper: #F7F3EC; --ink: #1F1D1A; --ink-2: #57524A;
+  --mute: #8C857A; --terra: #A8482A; --terra-soft: #E7C9BC; --brass: #A9874E; --line: rgba(31,29,26,.12);
+  --ok: #3F6B4E; --serif: "Fraunces", Georgia, serif; --sans: "Inter Tight", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--stone); }
+body { font-family: var(--sans); color: var(--ink); -webkit-font-smoothing: antialiased; }
+#stage { position: relative; width: 1920px; height: 1080px; overflow: hidden;
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 240px 240px,
+    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 240px 240px,
+    linear-gradient(rgba(31,29,26,.035) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(31,29,26,.035) 1px, transparent 1px) 0 0 / 48px 48px,
+    var(--stone); }
+.abs { position: absolute; }
+.scene { position: absolute; inset: 0; opacity: 0; }
+
+/* frame furniture */
+#head { position: absolute; left: 96px; right: 96px; top: 44px; height: 40px; display: flex;
+  justify-content: space-between; align-items: center; font: 500 17px/1 var(--mono); letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-2); z-index: 5; }
+#head::after { content: ""; position: absolute; left: 0; right: 0; bottom: -14px; height: 1px; background: var(--ink); opacity: .55; }
+#chapter b { color: var(--terra); font-weight: 700; margin-right: 14px; }
+#progress { position: absolute; left: 96px; bottom: 40px; width: 1728px; height: 2px; background: var(--line); z-index: 5; }
+#progress i { position: absolute; left: 0; top: 0; height: 2px; background: var(--terra); width: 0; }
+
+#cap { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; z-index: 6;
+  font: 500 34px/1.2 var(--sans); letter-spacing: -.005em; }
+#cap span.line { display: inline-block; padding: 12px 26px 14px; background: rgba(247,243,236,.92);
+  border: 1px solid var(--line); border-radius: 3px; box-shadow: 0 8px 30px rgba(31,29,26,.08); }
+#cap .w { transition: none; }
+
+/* wipe between chapters: a terracotta sheet with the chapter title */
+#wipe { position: absolute; inset: 0; background: var(--terra); z-index: 8; transform: translateX(-101%);
+  display: flex; align-items: center; padding-left: 160px; color: var(--paper); }
+#wipe .n { font: 500 22px/1 var(--mono); letter-spacing: .2em; margin-right: 40px; opacity: .8; }
+#wipe .t { font: 300 84px/1 var(--serif); letter-spacing: -.02em; }
+
+/* type */
+.eyebrow { font: 500 18px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--terra); }
+.display { font: 300 96px/1.02 var(--serif); letter-spacing: -.025em; }
+.h2 { font: 400 54px/1.08 var(--serif); letter-spacing: -.02em; }
+.big { font: 300 150px/0.95 var(--serif); letter-spacing: -.04em; font-variant-numeric: lining-nums tabular-nums; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.label { font: 500 16px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+.body { font: 400 26px/1.4 var(--sans); color: var(--ink-2); }
+
+/* pieces */
+.card { background: var(--paper); border: 1px solid var(--line); box-shadow: 0 18px 50px rgba(31,29,26,.10); }
+.chip { display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; background: var(--paper);
+  border: 1px solid var(--line); font: 500 20px/1 var(--mono); color: var(--ink); white-space: nowrap; }
+.chip.terra { background: var(--terra); color: var(--paper); border-color: var(--terra); }
+.term { background: #1C1B19; color: #E8E2D6; font: 400 19px/1.5 var(--mono); padding: 22px 26px; white-space: pre;
+  overflow: hidden; box-shadow: 0 24px 60px rgba(31,29,26,.25); }
+.term .p { color: #D9A77F; }
+.term .dim { color: #9A9184; }
+.sheet { font: 400 17px/1 var(--mono); border-collapse: collapse; background: var(--paper); }
+.sheet td, .sheet th { border: 1px solid #D8D0C2; padding: 9px 12px; white-space: nowrap; }
+.sheet th { background: #E6DFD3; font-weight: 500; color: var(--ink-2); text-align: left; }
+.dim-line { position: absolute; height: 1px; background: var(--ink); }
+.dim-line::before, .dim-line::after { content: ""; position: absolute; top: -7px; width: 1px; height: 15px; background: var(--ink); }
+.dim-line::before { left: 0; } .dim-line::after { right: 0; }
+.dim-text { position: absolute; font: 500 15px/1 var(--mono); color: var(--ink-2); letter-spacing: .06em; }
+.tick { color: var(--ok); font-weight: 700; }
+.box { position: absolute; border: 2px solid var(--terra); background: rgba(168,72,42,.10); }
+.sw { position: absolute; width: 74px; height: 74px; background-size: cover; background-position: center;
+  border: 1px solid rgba(31,29,26,.18); }
+.sw.missing { background: repeating-linear-gradient(45deg, transparent 0 7px, rgba(168,72,42,.18) 7px 8px);
+  border: 1.5px dashed var(--terra); }
+.stamp { position: absolute; font: 700 26px/1 var(--mono); letter-spacing: .14em; color: var(--terra);
+  border: 3px solid var(--terra); padding: 12px 18px; transform: rotate(-6deg); text-transform: uppercase; }
+.rule { position: absolute; height: 2px; background: var(--brass); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="head"><span>FCI London · Supplier catalogue automation</span><span id="chapter"></span></div>
+  <div id="progress"><i></i></div>
+  <div id="cap"></div>
+  <div id="wipe"><span class="n"></span><span class="t"></span></div>
+</div>
+<script>
+// ---- engine: everything is a pure function of time, so every frame renders the same way twice
+const D = window.DATA, TM = window.TIMING;
+const S = Object.fromEntries(TM.scenes.map(s => [s.id, s]));
+const W = TM.words;
+const stage = document.getElementById("stage");
+const anims = [], tickers = [], SFX = [];
+const EASE = "cubic-bezier(.2,.75,.15,1)";
+
+function el(tag, cls, html, parent = stage, style = {}) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (html != null) e.innerHTML = html;
+  Object.assign(e.style, style);
+  parent.appendChild(e);
+  return e;
+}
+function px(o) { const s = {}; for (const k in o) s[k] = typeof o[k] === "number" ? o[k] + "px" : o[k]; return s; }
+// A second animation of the same property must use fill "forwards", or its first keyframe would
+// apply from time zero and hide the earlier one.
+function at(e, kf, t, dur = .7, easing = EASE, fill = "both") {
+  const a = e.animate(kf, { delay: t * 1000, duration: dur * 1000, fill, easing });
+  a.pause(); anims.push(a); return a;
+}
+const norm = s => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+function cue(scene, word, nth = 0) {
+  let k = 0;
+  for (const w of W) if (w.scene === scene && norm(w.text).startsWith(norm(word))) { if (k++ === nth) return w.t; }
+  console.warn("missing cue", scene, word, nth); return S[scene].start;
+}
+const fadeUp = (e, t, d = .7, y = 26) => at(e, [{ opacity: 0, transform: `translateY(${y}px)` }, { opacity: 1, transform: "none" }], t, d);
+const fadeIn = (e, t, d = .5) => at(e, [{ opacity: 0 }, { opacity: 1 }], t, d, "linear");
+const pop = (e, t, d = .5) => at(e, [{ opacity: 0, transform: "scale(.86)" }, { opacity: 1, transform: "scale(1)" }], t, d, "cubic-bezier(.3,1.5,.5,1)");
+const grow = (e, t, d = .8, w) => at(e, [{ width: "0px" }, { width: w + "px" }], t, d);
+const fmt = n => Math.round(n).toLocaleString("en-GB");
+function counter(e, t0, d, from, to, f = fmt, sound = true) {
+  tickers.push(t => { const p = Math.min(1, Math.max(0, (t - t0) / d)); const q = 1 - Math.pow(1 - p, 3); e.textContent = f(from + (to - from) * q); });
+  if (sound) SFX.push({ t: t0 + d, kind: "land" });
+}
+function typer(e, text, t0, cps = 40) {
+  tickers.push(t => { const n = Math.max(0, Math.min(text.length, Math.floor((t - t0) * cps))); e.textContent = text.slice(0, n); });
+  return t0 + text.length / cps;
+}
+function scene(id, chapter) {
+  const s = S[id], root = el("div", "scene", null);
+  root.dataset.id = id;
+  const ids = TM.scenes.map(x => x.id), i = ids.indexOf(id);
+  at(root, [{ opacity: 0 }, { opacity: 1 }], Math.max(0, s.start - .05), .25, "linear");
+  if (i < ids.length - 1) at(root, [{ opacity: 1 }, { opacity: 0 }], s.end - .05, .25, "linear", "forwards");
+  if (chapter) tickers.push(t => { if (t >= s.start - .1 && t < s.end) chapterEl.innerHTML = chapter; });
+  return root;
+}
+const chapterEl = document.getElementById("chapter");
+
+// ---- chapter wipes: only where the story moves on to a new part
+const WIPES = [["run", "01", "The run"], ["richard", "02", "Richard Double Bed"], ["burt", "03", "Burt Corner Sofa"],
+  ["images", "04", "Images"], ["thomas", "05", "Proof"], ["drive", "06", "The workspace"],
+  ["assistant", "07", "The assistant"], ["close", "08", "Result"]];
+const wipe = document.getElementById("wipe");
+const inout = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+tickers.push(t => {
+  let x = -101;
+  for (const [id, n, title] of WIPES) {
+    const b = S[id].start, a0 = b - .42, a1 = b - .08, b0 = b + .18, b1 = b + .56;
+    if (t < a0 || t > b1) continue;
+    wipe.querySelector(".n").textContent = n; wipe.querySelector(".t").textContent = title;
+    x = t < a1 ? -101 + 101 * inout((t - a0) / (a1 - a0)) : t < b0 ? 0 : 101 * inout((t - b0) / (b1 - b0));
+  }
+  wipe.style.transform = `translateX(${x}%)`;
+});
+for (const [id] of WIPES) SFX.push({ t: S[id].start - .42, kind: "wipe" });
+
+// ---- captions: short phrases, each word lights up as it is spoken
+const lines = []; { let cur = [];
+  for (const w of W) { cur.push(w); if (cur.length >= 7 || /[.,:;?!]$/.test(w.raw)) { lines.push(cur); cur = []; } }
+  if (cur.length) lines.push(cur); }
+const cap = document.getElementById("cap"); let shown = -1;
+tickers.push(t => {
+  let k = lines.findIndex(l => t >= l[0].t - .05 && t <= l[l.length - 1].t + l[l.length - 1].d + .35);
+  if (S.creator && t >= S.creator.start) k = -1;
+  if (k !== shown) { shown = k; cap.innerHTML = k < 0 ? "" : `<span class="line">${lines[k].map((w, j) => `<span class="w" data-j="${j}">${w.raw}</span>`).join(" ")}</span>`; }
+  if (k >= 0) cap.querySelectorAll(".w").forEach((s, j) => { s.style.opacity = t >= lines[k][j].t - .02 ? 1 : .32; });
+});
+const prog = document.querySelector("#progress i");
+tickers.push(t => { prog.style.width = (1728 * Math.min(1, t / TM.total)) + "px"; });
+
+// ======================================================================= scenes
+const P = D.products;
+const euro = n => "€" + fmt(n), pound = n => "£" + fmt(n);
+
+// 0 hook ---------------------------------------------------------------
+{ const r = scene("hook", "<b>00</b>Overview");
+  const s = S.hook;
+  const eb = el("div", "eyebrow abs", "Round 2 · technical assessment", r, px({ left: 120, top: 150 }));
+  const ti = el("div", "display abs", "Supplier files in.<br>FCI upload sheets out.", r, px({ left: 116, top: 190, width: 1100 }));
+  fadeUp(eb, s.start + .1); fadeUp(ti, s.start + .25, .9);
+  const items = [["burt", "Burt Corner Sofa", "Franco Ferri · GBP"], ["richard", "Richard Double Bed", "Cattelan Italia · EUR"], ["thomas", "Thomas Double Bed", "Cattelan Italia · EUR"]];
+  const t3 = cue("hook", "3");
+  items.forEach(([k, name, src], i) => {
+    const x = 120 + i * 470, c = el("div", "card abs", null, r, px({ left: x, top: 430, width: 440, height: 330 }));
+    const img = k === "burt" ? D.images.burt[0] : D.images[k][0];
+    el("div", "abs", null, c, px({ left: 0, top: 0, width: 440, height: 250, background: `#fff url(${"assets/" + img}) center/cover` }));
+    el("div", "abs", `<div style="font:500 23px/1.2 var(--sans)">${name}</div><div class="label" style="margin-top:6px">${src} · from ${k === "burt" ? pound(P[k].base_price) : euro(P[k].base_price)}</div>`, c, px({ left: 20, top: 266 }));
+    fadeUp(c, t3 + i * .18, .7, 40);
+  });
+  const files = ["product-upload", "categories", "images", "attributes", "prices", "details"];
+  const t6 = cue("hook", "6");
+  const fileX = 1550;
+  files.forEach((f, i) => { const c = el("div", "chip abs", `<span style="color:var(--terra)">csv</span>${f}`, r, px({ left: fileX, top: 430 + i * 56, height: 46, fontSize: 18 })); fadeUp(c, t6 + i * .09, .45, 14); SFX.push({ t: t6 + i * .09, kind: "tick", v: .5 }); });
+  const cmd = el("div", "chip terra abs", "$ uv run fci run jobs/", r, px({ left: 1240, top: 250, fontSize: 24, padding: "16px 22px" }));
+  pop(cmd, cue("hook", "1")); SFX.push({ t: cue("hook", "1"), kind: "land" });
+  const by = el("div", "label abs", "Prateek Sahni · for FCI London", r, px({ left: 120, top: 800, color: "var(--ink-2)" }));
+  fadeIn(by, cue("hook", "fci"));
+}
+
+// 1 pain ---------------------------------------------------------------
+{ const r = scene("pain", "<b>00</b>Today, by hand");
+  const s = S.pain, aspect = D.page.aspect, H = 640, Wd = H * aspect;
+  const pg = el("div", "card abs", null, r, px({ left: 120, top: 150, width: Wd, height: H, background: `#fff url(assets/p358.png) center/cover` }));
+  fadeUp(pg, s.start + .05);
+  const pn = el("div", "abs num", "", r, px({ left: 120, top: 815, fontSize: 30, color: "var(--ink)" }));
+  const tp = cue("pain", "373");
+  tickers.push(t => { const p = Math.min(1, Math.max(0, (t - tp) / 1.8)); const n = Math.max(1, Math.round(1 + 357 * (1 - Math.pow(1 - p, 2)))); pn.innerHTML = `p. ${n} <span style="color:var(--mute)">of ${D.page.page_count}</span>`; });
+  fadeIn(pn, s.start + .2);
+  // the sheet being typed by hand
+  const sx = 120 + Wd + 70, sheet = el("table", "sheet abs", null, r, px({ left: sx, top: 150 }));
+  sheet.innerHTML = `<tr><th>code</th><th>combo</th><th>price</th></tr>`;
+  const tt = cue("pain", "typing"), rowsShown = 12;
+  D.price_rows.slice(0, rowsShown).forEach((row, i) => {
+    const tr = el("tr", null, `<td>${row.code}</td><td>${row.combo}</td><td>${row.price}</td>`, sheet);
+    at(tr, [{ opacity: 0 }, { opacity: 1 }], tt + .15 + i * .32, .12, "linear");
+  });
+  const cnt = el("div", "big abs", "0", r, px({ left: sx, top: 720, fontSize: 120 }));
+  el("div", "label abs", "price rows · Richard alone", r, px({ left: sx + 6, top: 850 }));
+  counter(cnt, cue("pain", "2340"), 1.9, 0, P.richard.combinations);
+  fadeIn(cnt, tt - .2);
+  const st = el("div", "stamp", "by hand", r, px({ left: sx + 760, top: 735 }));
+  pop(st, cue("pain", "by")); SFX.push({ t: cue("pain", "by"), kind: "stamp" });
+}
+
+// 2 run ----------------------------------------------------------------
+{ const r = scene("run", "<b>01</b>The run");
+  const files = [["PDF", "CATTELAN ITALIA p.list 05-26 EUR", `${D.page.page_count} pages · prices, sizes, drawings`, "cattelan"],
+    ["XLSM", "Franco Ferri GBP Price List · June 2026", `row ${D.burt_modules.at(-1).source_row} · BERTE' FF modules`, "franco"],
+    ["XLS", "Franco Ferri swatch card 2025", "fabrics · leathers · feet · stitching", "swatch"]];
+  files.forEach(([ext, name, meta, word], i) => {
+    const c = el("div", "card abs", `<div class="abs num" style="left:0;top:0;width:96px;height:118px;background:${i ? "var(--brass)" : "var(--terra)"};color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700">${ext}</div>
+      <div class="abs" style="left:120px;top:24px;font:500 22px/1.25 var(--sans);width:420px">${name}</div><div class="abs label" style="left:120px;top:84px">${meta}</div>`, r, px({ left: 120, top: 160 + i * 150, width: 560, height: 118 }));
+    fadeUp(c, cue("run", word), .6, 30); SFX.push({ t: cue("run", word), kind: "tick", v: .6 });
+  });
+  const job = D.job.split("\n").filter(l => l && !l.startsWith("#")).map(l => l.replace(/\s+#.*$/, "").replace(/"(https?:\/\/[^"]{24})[^"]*"/, '"$1…"')).join("\n");
+  const jc = el("div", "card abs", `<div class="label" style="margin-bottom:14px">jobs/richard-double-bed.yaml</div><pre class="num" style="font-size:17px;line-height:1.55;color:var(--ink);white-space:pre-wrap"></pre>`, r, px({ left: 730, top: 160, width: 520, height: 420, padding: "24px 26px" }));
+  const tj = cue("run", "job");
+  fadeUp(jc, tj - .3); typer(jc.querySelector("pre"), job, tj, 70);
+  const term = el("div", "term abs", "", r, px({ left: 1290, top: 160, width: 530, height: 560, fontSize: 15, whiteSpace: "pre-wrap" }));
+  const tr = cue("run", "command") - 1.2;
+  fadeUp(term, tr - .5);
+  const lines = D.run.trim().split("\n").filter(l => !l.includes("output:"));
+  const cmd = "$ uv run fci run jobs/";
+  tickers.push(t => {
+    const typed = Math.max(0, Math.min(cmd.length, Math.floor((t - tr) * 40)));
+    const after = t - (tr + cmd.length / 40 + .15);
+    const n = after < 0 ? 0 : Math.min(lines.length, Math.floor(after / .07) + 1);
+    const body = lines.slice(0, n).map(l => l.replace(/^== (.*)$/, '<span class="p">== $1</span>').replace(/(0 errors)/, '<span style="color:#9BC2A3">$1</span>')).join("\n");
+    term.innerHTML = `<span class="p">${cmd.slice(0, typed)}</span>\n${body.replace(/\n   /g, "\n ")}`;
+  });
+  SFX.push({ t: tr + cmd.length / 40 + .15, kind: "tick", v: .7 });
+}
+
+// 3 richard ------------------------------------------------------------
+{ const r = scene("richard", "<b>02</b>Richard Double Bed · Cattelan Italia");
+  const H = 800, Wd = H * D.page.aspect;
+  const pg = el("div", "card abs", null, r, px({ left: 120, top: 140, width: Wd, height: H, background: "#fff url(assets/p358.png) center/cover" }));
+  fadeUp(pg, S.richard.start + .1);
+  const t70 = cue("richard", "70");
+  D.page.cells.forEach((c, i) => {
+    const b = el("div", "box", null, pg, px({ left: c.x * Wd - 3, top: c.y * H - 2, width: c.w * Wd + 6, height: c.h * H + 4 }));
+    fadeIn(b, t70 + i * .022, .15);
+  });
+  SFX.push({ t: t70, kind: "sweep" });
+  const x0 = 120 + Wd + 80;
+  const n70 = el("div", "big abs", "0", r, px({ left: x0, top: 140 }));
+  el("div", "label abs", `prices on p.358`, r, px({ left: x0 + 8, top: 290 }));
+  counter(n70, t70, 1.5, 0, 70); fadeIn(n70, t70 - .1, .2);
+  [["5 sizes", "5"], ["10 cover columns", "10"], ["+ pull-up storage version", "storage"]].forEach(([txt, w], i) => {
+    const c = el("div", "chip abs", txt, r, px({ left: x0 + [0, 150, 410][i], top: 330 })); fadeUp(c, cue("richard", w), .45, 12);
+  });
+  // colours from the online finishes catalogue
+  const tc = cue("richard", "cattelan");
+  const head = el("div", "abs", `<div class="eyebrow">Cattelan finishes catalogue · online</div>`, r, px({ left: x0, top: 420 }));
+  fadeUp(head, tc);
+  D.swatches.ecp.forEach((src, i) => {
+    const s = el("div", "sw", null, r, px({ left: x0 + (i % 9) * 82, top: 462 + Math.floor(i / 9) * 82, backgroundImage: `url(assets/${src})` }));
+    pop(s, tc + .25 + i * .05, .4);
+  });
+  const n356 = el("div", "abs", `<span class="num" style="font-size:44px;font-weight:500">${P.richard.swatches.downloaded}</span><span class="label" style="margin-left:18px">colours behind the columns · e.g. ${D.swatches.ecp.length} synthetic leathers</span>`, r, px({ left: x0, top: 640 }));
+  fadeUp(n356, cue("richard", "356"));
+  // 70 -> 2,340
+  const ts = cue("richard", "so");
+  const eq = el("div", "abs", `<span class="num" style="font-size:34px">70 prices × colours per group =</span>`, r, px({ left: x0, top: 730 }));
+  fadeUp(eq, ts);
+  const rowsN = el("div", "big abs", "70", r, px({ left: x0, top: 776, fontSize: 120, color: "var(--terra)" }));
+  fadeIn(rowsN, ts, .3); counter(rowsN, cue("richard", "2340"), 1.6, 70, P.richard.combinations);
+  const lab = el("div", "label abs", `rows · ${euro(P.richard.price_range[0])} to ${euro(P.richard.price_range[1])} · copied exactly`, r, px({ left: x0 + 6, top: 912 - 20, display: "none" }));
+  const lab2 = el("div", "label abs", `rows<br>${euro(P.richard.price_range[0])} to ${euro(P.richard.price_range[1])}<br>copied exactly`, r, px({ left: x0 + 400, top: 810, lineHeight: "1.7" }));
+  fadeUp(lab2, cue("richard", "copied"));
+  fadeUp(lab, cue("richard", "copied"));
+}
+
+// 4 burt ---------------------------------------------------------------
+{ const r = scene("burt", "<b>03</b>Burt Corner Sofa · Naustro Fiera (Franco Ferri)");
+  const im = el("div", "card abs", null, r, px({ left: 120, top: 140, width: 760, height: 380, background: `#fff url(assets/${D.images.burt[0]}) center/contain no-repeat` }));
+  fadeUp(im, S.burt.start + .1);
+  el("div", "label abs", "Franco Ferri product photo · berte", r, px({ left: 120, top: 536 }));
+  // schematic of the corner-with-terminal layout, drawn from the module widths in the price list
+  const mods = D.burt_modules.slice(0, 4), sc = 1.0, ox = 150, oy = 650;
+  const pos = [[0, 0, 108, 101], [108, 0, 84, 101], [192, 0, 113, 113], [192, 113, 101, 168]];
+  const blocks = pos.map(([x, y, w, h], i) => {
+    const b = el("div", "abs", `<span class="num" style="font-size:14px">${mods[i].code}</span>`, r, px({ left: ox + x * sc, top: oy + y * sc, width: w * sc - 4, height: h * sc - 4,
+      border: "1.5px solid var(--ink)", background: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center" }));
+    return b;
+  });
+  const dl = el("div", "dim-line", null, r, px({ left: ox, top: oy - 22, width: 305 * sc }));
+  const dt = el("div", "dim-text", "W 305 cm", r, px({ left: ox + 305 * sc / 2 - 36, top: oy - 46 }));
+  fadeIn(dl, S.burt.start + .6); fadeIn(dt, S.burt.start + .6);
+  el("div", "label abs", "corner with terminal<br>plan from the module<br>sizes in the price list", r, px({ left: 480, top: 700, lineHeight: "1.6" }));
+  // the price list rows, added up as they are spoken
+  const x0 = 960, tb = el("table", "sheet abs", null, r, px({ left: x0, top: 140, fontSize: 20 }));
+  tb.innerHTML = `<tr><th>code</th><th>module</th><th style="text-align:right">Cat.70 £</th></tr>`;
+  fadeUp(tb, S.burt.start + .3);
+  const words = ["698", "320", "564", "731"];
+  mods.forEach((m, i) => {
+    const tr = el("tr", null, `<td>${m.code}</td><td>${m.description.toLowerCase()}</td><td style="text-align:right;font-weight:700">${m.cat70}</td>`, tb);
+    const t = cue("burt", words[i]);
+    at(tr, [{ opacity: 0, transform: "translateX(-16px)" }, { opacity: 1, transform: "none" }], t, .4);
+    at(tr, [{ background: "var(--terra-soft)" }, { background: "var(--paper)" }], t, 1.4, "linear", "forwards");
+    at(blocks[i], [{ background: "var(--terra-soft)" }, { background: "var(--terra-soft)" }], t, .1, "linear");
+    fadeIn(blocks[i], t, .3);
+    SFX.push({ t, kind: "tick", v: .8 });
+  });
+  const tt = cue("burt", "2313");
+  const rule = el("div", "rule", null, r, px({ left: x0, top: 418, width: 0 })); grow(rule, tt - .2, .5, 820);
+  const tot = el("div", "big abs", "£0", r, px({ left: x0, top: 450, color: "var(--ink)" }));
+  fadeIn(tot, tt - .1, .2); counter(tot, tt, 1.3, 0, mods.reduce((a, m) => a + m.cat70, 0), pound);
+  el("div", "label abs", `Franco Ferri GBP price list · row ${D.burt_modules.at(-1).source_row} · entry fabric category`, r, px({ left: x0 + 6, top: 610 }));
+  const fin = el("div", "abs", `<span class="chip">4 layouts</span> <span class="chip">192 covers</span> <span class="chip terra">${P.burt.combinations} priced rows</span>`, r, px({ left: x0, top: 690 }));
+  fadeUp(fin, cue("burt", "2313") + 1.4);
+}
+
+// 5 images -------------------------------------------------------------
+{ const r = scene("images", "<b>04</b>Images · full supplier quality");
+  const s = S.images, z = D.zoom, [sw, sh] = z.source_size.split("x").map(Number);
+  const Wd = 800, H = Wd * sh / sw;
+  const frame = el("div", "card abs", null, r, px({ left: 120, top: 170, width: Wd, height: H, background: "url(assets/zoom-source.jpg) center/cover" }));
+  fadeUp(frame, s.start + .1);
+  const dim = el("div", "dim-text", `${sw} × ${sh} px · supplier original`, r, px({ left: 120, top: 150 + H + 36 }));
+  fadeIn(dim, cue("images", "full"));
+  const tc = cue("images", "cropped"), side = H, cx = z.offset[0] / sw * Wd;
+  const shadeL = el("div", "abs", null, frame, px({ left: 0, top: 0, width: cx, height: H, background: "rgba(31,29,26,.55)" }));
+  const shadeR = el("div", "abs", null, frame, px({ left: cx + side, top: 0, width: Wd - cx - side, height: H, background: "rgba(31,29,26,.55)" }));
+  const sq = el("div", "abs", null, frame, px({ left: cx, top: 0, width: side, height: H, border: "3px solid var(--terra)" }));
+  [shadeL, shadeR, sq].forEach(e => fadeIn(e, tc, .5)); SFX.push({ t: tc, kind: "tick", v: .7 });
+  const sqLab = el("div", "dim-text", `${z.size.replace("x", " × ")} px · FCI file, no resampling`, r, px({ left: 120 + cx, top: 150 + H + 64, color: "var(--terra)" }));
+  fadeIn(sqLab, tc + .3);
+  const mag = z.box[2] - z.box[0], k = Wd / sw, mx = 120 + (z.box[0] + z.offset[0]) * k, my = 170 + (z.box[1] + z.offset[1]) * k;
+  const tm = cue("images", "measured");
+  const mk = el("div", "abs", null, r, px({ left: mx, top: my, width: mag * k, height: (z.box[3] - z.box[1]) * k, border: "2px solid #fff", outline: "2px solid var(--terra)" }));
+  fadeIn(mk, tm - .2, .3);
+  [["zoom-original.png", "supplier original"], ["zoom-processed.png", "FCI file"]].forEach(([f, lab], i) => {
+    const c = el("div", "card abs", `<div class="abs" style="inset:0;background:url(assets/${f}) center/cover;image-rendering:pixelated"></div>`, r, px({ left: 1000 + i * 410, top: 170, width: 390, height: 292 }));
+    el("div", "label", `${lab} · 400% zoom`, c, px({ position: "absolute", left: 0, top: 304 }));
+    fadeUp(c, tm + i * .15);
+  });
+  // fidelity scale: every processed photo against its original
+  const g0 = 1000, gw = 800, gy = 640, lo = 30, hi = 70, X = v => g0 + (v - lo) / (hi - lo) * gw;
+  const axis = el("div", "abs", null, r, px({ left: g0, top: gy, width: gw, height: 2, background: "var(--ink)" }));
+  for (let v = lo; v <= hi; v += 10) { el("div", "abs", null, r, px({ left: X(v), top: gy - 6, width: 1, height: 14, background: "var(--ink)" })); el("div", "dim-text", v + " dB", r, px({ left: X(v) - 22, top: gy + 18 })); }
+  const thr = el("div", "abs", `<div class="label" style="position:absolute;left:8px;top:-4px;white-space:nowrap;color:var(--ink-2)">40 dB · visually lossless</div>`, r, px({ left: X(40), top: gy - 110, width: 2, height: 110, background: "var(--ink-2)" }));
+  const all = [...P.richard.fidelity, ...P.burt.fidelity, ...P.thomas.fidelity];
+  const tf = cue("images", "56");
+  const band = el("div", "abs", null, r, px({ left: X(Math.min(...all)), top: gy - 34, width: X(Math.max(...all)) - X(Math.min(...all)), height: 22, background: "var(--terra-soft)" }));
+  [axis, thr].forEach(e => fadeIn(e, tm + .6));
+  fadeIn(band, tf);
+  all.forEach((v, i) => { const d = el("div", "abs", null, r, px({ left: X(v) - 6, top: gy - 29, width: 12, height: 12, borderRadius: "50%", background: "var(--terra)" })); pop(d, tf + i * .06, .3); });
+  const lab = el("div", "abs", `<span class="num" style="font-size:40px;font-weight:500;color:var(--terra)">${Math.min(...all).toFixed(1)} – ${Math.max(...all).toFixed(1)} dB</span><span class="label" style="margin-left:20px">${all.length} photos · all three products</span>`, r, px({ left: g0, top: gy + 70 }));
+  fadeUp(lab, cue("images", "visually"));
+  SFX.push({ t: tf, kind: "sweep" });
+}
+
+// 6 swatches -----------------------------------------------------------
+{ const r = scene("swatches", "<b>04</b>Swatches");
+  const s = S.swatches;
+  const l = el("div", "abs", `<div class="eyebrow">Cattelan · Richard</div><div class="h2" style="margin-top:12px">Downloaded from the supplier</div>`, r, px({ left: 120, top: 150 }));
+  fadeUp(l, s.start + .1);
+  const td = cue("swatches", "downloaded");
+  D.swatches.richard.slice(0, 45).forEach((src, i) => { const e = el("div", "sw", null, r, px({ left: 120 + (i % 9) * 82, top: 300 + Math.floor(i / 9) * 82, backgroundImage: `url(assets/${src})` })); fadeIn(e, s.start + .2 + i * .03, .25); });
+  const n1 = el("div", "abs", `<span class="num" style="font-size:44px;font-weight:500">${P.richard.swatches.downloaded}</span><span class="label" style="margin-left:18px">swatch images · full set · sample shown</span>`, r, px({ left: 120, top: 730 }));
+  fadeUp(n1, td);
+  const x0 = 1010;
+  const rr = el("div", "abs", `<div class="eyebrow">Franco Ferri · Burt</div><div class="h2" style="margin-top:12px">Reused from FCI's server</div>`, r, px({ left: x0, top: 150 }));
+  const tn = cue("swatches", "franco"); fadeUp(rr, tn);
+  const reused = P.burt.swatches["reused from FCI"];
+  const needed = P.burt.warnings.filter(w => /swatch|FCI swatch images/.test(w)).map(w => +w.match(/^(\d+)/)[1]).reduce((a, b) => a + b, 0);
+  const cols = 12, slot = 66;
+  D.swatches.burt.forEach((src, i) => { const e = el("div", "sw", null, r, px({ left: x0 + (i % cols) * slot, top: 300 + Math.floor(i / cols) * slot, width: 60, height: 60, backgroundImage: `url(assets/${src})` })); fadeIn(e, cue("swatches", "reuses") + i * .025, .25); });
+  const base = D.swatches.burt.length;
+  for (let j = 0; j < needed; j++) { const i = base + j, e = el("div", "sw missing", null, r, px({ left: x0 + (i % cols) * slot, top: 300 + Math.floor(i / cols) * slot, width: 60, height: 60 })); fadeIn(e, cue("swatches", "34") + j * .02, .2); }
+  const n2 = el("div", "abs", `<span class="num" style="font-size:44px;font-weight:500">${reused}</span><span class="label" style="margin-left:18px">reused · matched by colour code · sample shown</span>`, r, px({ left: x0, top: 730 }));
+  fadeUp(n2, cue("swatches", "162"));
+  const n3 = el("div", "abs", `<span class="num" style="font-size:44px;font-weight:500;color:var(--terra)">${needed}</span><span class="label" style="margin-left:18px">still needed · listed in the report</span>`, r, px({ left: x0, top: 800 }));
+  fadeUp(n3, cue("swatches", "34")); SFX.push({ t: cue("swatches", "34"), kind: "land" });
+}
+
+// 7 copy ---------------------------------------------------------------
+{ const r = scene("copy", "<b>04</b>Descriptions");
+  const s = S.copy, meta = D.copy.meta;
+  const chip = el("div", "chip terra abs", "NVIDIA Nemotron 3.5 Super", r, px({ left: 120, top: 160 }));
+  pop(chip, cue("copy", "nvidia"));
+  const card = el("div", "card abs", `<div class="label">richard-double-bed-by-cattelan-italia.html · meta description</div>
+    <div class="h2" style="font-size:44px;margin:18px 0 18px">Richard Double Bed by Cattelan Italia</div><div class="body" style="font-size:30px;color:var(--ink)"></div>`, r, px({ left: 120, top: 250, width: 1100, height: 330, padding: "34px 40px" }));
+  fadeUp(card, s.start + .2);
+  typer(card.querySelector(".body"), meta, cue("copy", "writes"), 55);
+  const checks = [["No prices in the text", "checked"], [`Meta description ${meta.length} characters · allowed 100–160`, "checked"], ["Falls back to the supplier's text if a check fails", "used"]];
+  checks.forEach(([txt, w], i) => {
+    const c = el("div", "abs", `<span class="tick" style="font-size:30px">✓</span>&nbsp; <span style="font:500 24px/1.3 var(--sans)">${txt}</span>`, r, px({ left: 1290, top: 300 + i * 90, width: 520 }));
+    const t = cue("copy", w) + i * .22; fadeUp(c, t, .4, 10); SFX.push({ t, kind: "tick", v: .7 });
+  });
+}
+
+// 8 thomas -------------------------------------------------------------
+{ const r = scene("thomas", "<b>05</b>Proof · Thomas Double Bed");
+  const s = S.thomas;
+  const im = el("div", "card abs", null, r, px({ left: 120, top: 150, width: 520, height: 520, background: `url(assets/${D.images.thomas[1]}) center/cover` }));
+  fadeUp(im, s.start + .1);
+  const st = el("div", "stamp", "built by hand at FCI", r, px({ left: 150, top: 600, background: "var(--paper)" }));
+  pop(st, cue("thomas", "built")); SFX.push({ t: cue("thomas", "built"), kind: "stamp" });
+  const x0 = 720, tb = el("table", "sheet abs", null, r, px({ left: x0, top: 150, fontSize: 18 }));
+  tb.innerHTML = `<tr><th>FCI's hand-built sizes</th><th>automation</th><th></th></tr>`;
+  fadeUp(tb, cue("thomas", "built"));
+  const te = cue("thomas", "every");
+  D.thomas.fci_sizes.forEach((fs, i) => {
+    const ours = D.thomas.our_sizes[i] || "";
+    const tr = el("tr", null, `<td>${fs}</td><td>${ours}</td><td class="tick" style="opacity:0">${fs === ours ? "✓" : "✗"}</td>`, tb);
+    fadeIn(tr, cue("thomas", "built") + .2 + i * .12, .2);
+    at(tr.lastChild, [{ opacity: 0 }, { opacity: 1 }], te + i * .14, .2, "linear"); SFX.push({ t: te + i * .14, kind: "tick", v: .5 });
+  });
+  const tbp = cue("thomas", "base");
+  const bp = el("div", "abs", `<span class="label">base price</span><br><span class="num" style="font-size:40px;font-weight:500">${euro(P.thomas.base_price)}</span> <span class="tick" style="font-size:28px">✓</span> <span class="label">same as FCI's live page</span>`, r, px({ left: x0, top: 470 }));
+  fadeUp(bp, tbp);
+  const tf = cue("thomas", "41");
+  const n41 = el("div", "big abs", "0", r, px({ left: x0, top: 590, color: "var(--terra)" }));
+  fadeIn(n41, tf - .1, .2); counter(n41, tf, 1, 0, 41);
+  const l41 = el("div", "abs body", "colours FCI still lists that Cattelan<br>no longer offers · found by the comparison", r, px({ left: x0 + 200, top: 640, width: 700 }));
+  fadeUp(l41, tf + .2);
+}
+
+// 9 verify -------------------------------------------------------------
+{ const r = scene("verify", "<b>07</b>Checks");
+  const s = S.verify;
+  const rep = el("div", "card abs", `<div class="label">output/cattelan-italia-889/report.md · warning</div><div style="font:500 24px/1.4 var(--sans);margin-top:12px;color:var(--ink)">${P.richard.warnings[0]}</div>`, r, px({ left: 120, top: 150, width: 1680, padding: "24px 30px", borderLeft: "6px solid var(--terra)" }));
+  fadeUp(rep, cue("verify", "anything"));
+  const term = el("div", "term abs", "", r, px({ left: 120, top: 340, width: 1000, height: 440, fontSize: 18 }));
+  const tg = cue("verify", "one");
+  fadeUp(term, tg - .2);
+  const cmd = "$ uv run fci grid output/cattelan-italia-889/csv/…-prices.csv";
+  const out = D.grid.split("\n").slice(0, 13).join("\n");
+  tickers.push(t => { const n = Math.max(0, Math.min(cmd.length, Math.floor((t - tg) * 45))); const done = t > tg + cmd.length / 45 + .2;
+    term.innerHTML = `<span class="p">${cmd.slice(0, n)}</span>\n${done ? out.replace(/^(\d.*)$/m, '<span style="color:#D9A77F">$1</span>') : ""}`; });
+  SFX.push({ t: tg + cmd.length / 45 + .2, kind: "tick", v: .7 });
+  const tt = cue("verify", "192");
+  const tests = el("div", "card abs", `<div class="big" style="font-size:120px">${D.tests}</div><div class="label" style="margin-top:6px">automated tests</div>`, r, px({ left: 1180, top: 340, width: 620, height: 210, padding: "26px 32px" }));
+  pop(tests, tt); SFX.push({ t: tt, kind: "land" });
+  const ci = el("div", "card abs", `<div class="label" style="margin-bottom:14px">GitHub Actions · every push</div><div style="display:grid;grid-template-columns:1fr 1fr">` + ["lint", "type check", "unit tests", "integration", "dependency audit", "security scan"].map(x => `<div style="font:500 22px/1.75 var(--sans)"><span class="tick">✓</span>&nbsp; ${x}</div>`).join("") + "</div>", r, px({ left: 1180, top: 570, width: 620, height: 210, padding: "22px 32px" }));
+  fadeUp(ci, cue("verify", "push"));
+}
+
+
+// 9b drive: the shared Google Drive workspace (live listing and sheet, read through the app's connection)
+{ const r = scene("drive", "<b>06</b>The workspace · Google Drive");
+  const s = S.drive, T = D.drive.tree, tabs = D.drive.sheet;
+  const card = el("div", "card abs", `<div class="label" style="margin-bottom:14px">My Drive › FCI Catalogue</div>`, r, px({ left: 120, top: 150, width: 760, height: 640, padding: "26px 30px" }));
+  fadeUp(card, s.start + .1);
+  const tPrice = cue("drive", "price"), tNew = cue("drive", "new"), tSaved = cue("drive", "saved");
+  T.forEach((e, i) => {
+    const icon = e.folder ? `<span style="color:var(--brass)">▰</span>` : `<span style="color:var(--terra)">▤</span>`;
+    const size = e.folder ? "" : `<span class="label" style="margin-left:auto;flex:none;white-space:nowrap">${e.size > 1e6 ? (e.size / 1e6).toFixed(1) + " MB" : Math.round(e.size / 1e3) + " KB"}</span>`;
+    const row = el("div", "drow", `${icon}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.name}</span>${size}`, card, px({ display: "flex", gap: "12px", alignItems: "center", padding: "8px 10px", marginLeft: e.depth * 30, font: "500 19px/1.25 var(--sans)" }));
+    const isList = /p\.list|Price List|Swatches|technical/.test(e.name) && !e.folder;
+    const isOut = e.depth === 2 && e.folder;
+    fadeIn(row, s.start + .25 + i * .06, .3);
+    if (isList) at(row, [{ background: "transparent" }, { background: "var(--terra-soft)" }], tPrice, .4, "linear", "forwards");
+    if (/CATTELAN ITALIA p\.list/.test(e.name)) at(row, [{ outline: "0px solid var(--terra)" }, { outline: "2px solid var(--terra)" }], tNew, .3, "linear", "forwards");
+    if (isOut) at(row, [{ background: "transparent" }, { background: "rgba(63,107,78,.16)" }], tSaved + i * .12 - 1.2, .4, "linear", "forwards");
+  });
+  const pat = el("div", "chip terra abs", "match: CATTELAN ITALIA p.list*.pdf → newest file wins", r, px({ left: 120, top: 810, fontSize: 18 }));
+  fadeUp(pat, tNew); SFX.push({ t: tNew, kind: "tick", v: .7 });
+  // the Products sheet, as staff see it
+  const cols = ["active", "sku", "model", "product_type", "category_code"], head = tabs.Products[0];
+  const idx = cols.map(c => head.indexOf(c));
+  const sheet = el("table", "sheet abs", `<tr>${cols.map(c => `<th style="background:#E2EFDA;color:#1E4620">${c}</th>`).join("")}</tr>`, r, px({ left: 940, top: 190, fontSize: 18 }));
+  el("div", "label abs", "Google Sheet · Products  (tabs: Products · Layouts · Options)", r, px({ left: 940, top: 150 }));
+  const tRows = cue("drive", "rows");
+  fadeUp(sheet, cue("drive", "products") - .2);
+  tabs.Products.slice(1).forEach((row, i) => {
+    const tr = el("tr", null, idx.map(j => `<td>${row[j] ?? ""}</td>`).join(""), sheet);
+    fadeIn(tr, tRows + i * .25, .25); SFX.push({ t: tRows + i * .25, kind: "tick", v: .45 });
+  });
+  const lay = tabs.Layouts.slice(1);
+  const lt = el("div", "abs", `<div class="label" style="margin-bottom:10px">Layouts tab · Burt</div>` + lay.map(l => `<div class="num" style="font-size:16px;line-height:1.7"><b>${l[1].split(" - ")[0]}</b> = ${l[2]}</div>`).join(""), r, px({ left: 940, top: 420, width: 860 }));
+  fadeUp(lt, tRows + 1);
+  const out = el("div", "abs", `<span class="num" style="font-size:22px">Outputs / 2026-11-01 / &lt;sku&gt; /</span><br><span class="label">6 CSVs · images · swatches.zip · report · price changes</span>`, r, px({ left: 940, top: 640 }));
+  fadeUp(out, tSaved);
+}
+
+// 9c changes: compare with the last run, write only what changed
+{ const r = scene("changes", "<b>06</b>Re-pricing");
+  const s = S.changes;
+  const flow = [["previous run", "prices.csv"], ["new run", "prices.csv"], ["only what changed", "prices-changed.csv"]];
+  flow.forEach(([a, b], i) => {
+    const c = el("div", "card abs", `<div class="label">${a}</div><div class="num" style="font-size:22px;margin-top:10px">${b}</div>`, r, px({ left: 120 + i * 470, top: 190, width: 400, height: 130, padding: "24px 28px", borderTop: i === 2 ? "5px solid var(--terra)" : "5px solid var(--brass)" }));
+    fadeUp(c, s.start + .2 + i * .35);
+    if (i < 2) { const ar = el("div", "abs num", i === 0 ? "vs" : "→", r, px({ left: 120 + i * 470 + 412, top: 232, fontSize: 34, color: "var(--mute)" })); fadeIn(ar, s.start + .4 + i * .35); }
+  });
+  const rule = el("div", "abs body", "Changed and new rows go in the upload file. Removed options are listed in the report.", r, px({ left: 120, top: 360, width: 1300 }));
+  fadeUp(rule, cue("changes", "ready"));
+  const tt = cue("changes", "thomas");
+  const res = el("div", "card abs", `<div class="label">output/cattelan-italia-806/price-changes.md · re-run on ${"2026-11-01"}</div><div class="h2" style="margin-top:14px">${D.changes.thomas}</div>`, r, px({ left: 120, top: 470, width: 1300, padding: "28px 34px", borderLeft: "6px solid var(--ok)" }));
+  fadeUp(res, tt); SFX.push({ t: cue("changes", "560"), kind: "land" });
+}
+
+// 9d assistant: the real web app, live answer (screenshots of the running app)
+function browser(r, shots, place) {
+  const f = el("div", "abs", `<div style="height:38px;background:#E2DACD;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid var(--line)"><i style="width:12px;height:12px;border-radius:50%;background:#D9A77F"></i><i style="width:12px;height:12px;border-radius:50%;background:#C9BBA4"></i><i style="width:12px;height:12px;border-radius:50%;background:#C9BBA4"></i><span class="num" style="margin-left:18px;font-size:14px;color:var(--ink-2)">FCI Catalogue · catalogue assistant (React)</span></div>`, r, px({ ...place, background: "var(--paper)", boxShadow: "0 30px 80px rgba(31,29,26,.22)", border: "1px solid var(--line)", overflow: "hidden" }));
+  const view = el("div", "abs", null, f, px({ left: 0, top: 38, width: place.width, height: place.height - 38, overflow: "hidden" }));
+  const zoom = el("div", "abs", null, view, px({ inset: 0 }));  // scaled inside the clipped view
+  const imgs = shots.map(name => el("div", "abs", null, zoom, px({ inset: 0, background: `url(assets/app/${name}.png) top left/100% auto no-repeat`, opacity: 0 })));
+  return { frame: f, view: zoom, imgs };
+}
+{ const r = scene("assistant", "<b>07</b>The assistant · live answers");
+  const s = S.assistant, W0 = 1300, H0 = 38 + W0 * 1800 / 2880;
+  const b = browser(r, ["welcome", "question", "answer"], { left: 310, top: 118, width: W0, height: H0 });
+  fadeUp(b.frame, s.start + .05);
+  at(b.imgs[0], [{ opacity: 0 }, { opacity: 1 }], s.start + .1, .2, "linear");
+  at(b.imgs[1], [{ opacity: 0 }, { opacity: 1 }], cue("assistant", "ask") - .2, .25, "linear");
+  const tA = cue("assistant", "richard");
+  at(b.imgs[2], [{ opacity: 0 }, { opacity: 1 }], tA - .1, .3, "linear"); SFX.push({ t: tA, kind: "tick", v: .7 });
+  // zoom into the answer, then point at the check mark
+  at(b.view, [{ transform: "scale(1)", transformOrigin: "0% 18%" }, { transform: "scale(1.75)", transformOrigin: "0% 18%" }], cue("assistant", "3") - .3, 1.1);
+  const ring = el("div", "abs", null, r, px({ left: 358, top: 558, width: 336, height: 44, border: "3px solid var(--ok)", borderRadius: "30px" }));
+  fadeIn(ring, cue("assistant", "checked"), .3); SFX.push({ t: cue("assistant", "checked"), kind: "land" });
+  const note = el("div", "chip abs", "every figure must appear in the tool results, or it isn't shown", r, px({ left: 870, top: 652, fontSize: 18 }));
+  fadeUp(note, cue("assistant", "checked") + .3);
+}
+
+// 9e confirm: proposal -> Confirm -> real run -> Drive link
+{ const r = scene("confirm", "<b>07</b>Confirm before anything runs");
+  const s = S.confirm, W0 = 1300, H0 = 38 + W0 * 1800 / 2880;
+  const b = browser(r, ["proposal", "running", "done"], { left: 310, top: 118, width: W0, height: H0 });
+  fadeUp(b.frame, s.start + .05);
+  at(b.imgs[0], [{ opacity: 0 }, { opacity: 1 }], s.start + .1, .2, "linear");
+  at(b.view, [{ transform: "scale(1)", transformOrigin: "0% 62%" }, { transform: "scale(1.45)", transformOrigin: "0% 62%" }], s.start + .6, 1.2);
+  const tC = cue("confirm", "confirm");
+  const ring = el("div", "abs", null, r, px({ left: 378, top: 738, width: 138, height: 72, border: "3px solid var(--terra)", borderRadius: "10px" }));
+  fadeIn(ring, tC - .1, .2); at(ring, [{ opacity: 1 }, { opacity: 0 }], cue("confirm", "then") - .2, .2, "linear", "forwards");
+  SFX.push({ t: tC, kind: "tick", v: .9 });
+  at(b.imgs[1], [{ opacity: 0 }, { opacity: 1 }], cue("confirm", "then"), .25, "linear");
+  const tDone = cue("confirm", "saves");
+  at(b.imgs[2], [{ opacity: 0 }, { opacity: 1 }], tDone, .3, "linear"); SFX.push({ t: tDone + .2, kind: "land" });
+}
+
+// 10 close -------------------------------------------------------------
+{ const r = scene("close", "<b>08</b>Result");
+  const s = S.close;
+  const big = el("div", "big abs", "0%", r, px({ left: 116, top: 170, fontSize: 260, color: "var(--terra)" }));
+  const te = cue("close", "85");
+  fadeIn(big, s.start + .1, .2); counter(big, te, 1.4, 0, 85, v => Math.round(v) + (v >= 84.5 ? "–90%" : "%"));
+  const sub = el("div", "h2 abs", "of the per-product work, automated", r, px({ left: 124, top: 440 }));
+  fadeUp(sub, cue("close", "work"));
+  [["New product", "a row in a sheet", "product"], ["New supplier", "a new reader", "supplier"]].forEach(([a, b, w], i) => {
+    const row = el("div", "abs", `<span class="label" style="font-size:20px;color:var(--ink-2)">${a}</span><span style="display:inline-block;width:70px;height:1px;background:var(--ink);vertical-align:middle;margin:0 22px"></span><span class="h2" style="font-size:52px">${b}</span>`, r, px({ left: 124, top: 590 + i * 100 }));
+    fadeUp(row, cue("close", w)); SFX.push({ t: cue("close", w), kind: "tick", v: .6 });
+  });
+  const tbl = el("table", "sheet abs", `<tr><th>product</th><th style="text-align:right">price rows</th><th style="text-align:right">images</th><th style="text-align:right">swatches</th></tr>` +
+    [["richard", "downloaded"], ["burt", "reused from FCI"], ["thomas", "downloaded"]].map(([k, sw]) => `<tr><td>${P[k].name}</td><td style="text-align:right">${fmt(P[k].combinations)}</td><td style="text-align:right">${P[k].images}</td><td style="text-align:right">${P[k].swatches[sw]}${k === "burt" ? " reused" : ""}</td></tr>`).join(""),
+    r, px({ left: 1130, top: 200, fontSize: 21 }));
+  fadeUp(tbl, s.start + .5);
+  el("div", "label abs", "from one run · 0 errors", r, px({ left: 1134, top: 400 }));
+  const repo = el("div", "chip abs", "github.com/hksahni0-ux/supplier-catalogue-automation", r, px({ left: 124, top: 820, fontSize: 20 }));
+  fadeUp(repo, cue("close", "reader"));
+}
+
+// 11 creator: the standard outro content (tagline, contacts, QR), in this video's own style
+{ const r = scene("creator", null);
+  const s = S.creator;
+  tickers.push(t => { if (t >= s.start - .1) chapterEl.innerHTML = "<b>—</b>Thank you"; });
+  const tag = el("div", "eyebrow abs", "Designed &amp; built by", r, px({ left: 0, right: 0, top: 128, textAlign: "center", fontSize: 20 }));
+  fadeIn(tag, s.start + .05);
+  const ph = el("div", "abs", null, r, px({ left: 425, top: 190, width: 250, height: 250, borderRadius: "50%", background: "url(assets/creator/prateek.jpg) center/cover", border: "6px solid var(--paper)", outline: "3px solid var(--terra)", boxShadow: "0 20px 50px rgba(31,29,26,.18)" }));
+  pop(ph, s.start + .1, .6);
+  const who = el("div", "abs", `<div class="display" style="font-size:76px">Prateek Sahni<span style="font:400 34px var(--serif);color:var(--mute)">, MEng</span></div>
+    <div style="font:600 28px var(--sans);color:var(--terra);margin-top:10px">AI Software Builder</div>
+    <div class="body" style="margin-top:14px;font-size:22px">Builds AI-powered software: automation, data pipelines and AI agents. Built this supplier catalogue automation end to end, from the price-list readers to the Drive workspace and the checked assistant.</div>
+    <div style="font:italic 300 26px var(--serif);color:var(--ink-2);margin-top:14px">“Asking why. Building what's useful.”</div>`, r, px({ left: 120, top: 460, width: 860, textAlign: "center" }));
+  fadeUp(who, s.start + .3);
+  const qr = el("div", "card abs", `<div class="label" style="text-align:center">Scan to visit</div><div style="width:200px;height:200px;margin:14px auto 0;background:url(assets/creator/qr-site.png) center/contain no-repeat"></div><div class="num" style="text-align:center;font-size:24px;margin-top:12px;font-weight:500">prateeksahni.pages.dev</div>`, r, px({ left: 1190, top: 150, width: 420, height: 330, padding: "22px" }));
+  pop(qr, cue("creator", "scan")); SFX.push({ t: cue("creator", "scan"), kind: "land" });
+  D.contacts.forEach((c, i) => {
+    const card = el("div", "card abs", `<div style="width:54px;height:54px;flex:none;border-radius:12px;display:grid;place-items:center;color:#fff;background:${c.bg}">${c.svg}</div><div style="min-width:0"><b style="font:600 21px var(--sans)">${c.label}</b><div class="num" style="font-size:16px;color:var(--ink-2);white-space:nowrap">${c.handle}</div></div>`,
+      r, px({ left: 1010 + (i % 2) * 400, top: 520 + Math.floor(i / 2) * 100, width: 380, height: 84, display: "flex", alignItems: "center", gap: "16px", padding: "0 18px" }));
+    fadeUp(card, s.start + .55 + i * .1, .5, 16);
+  });
+}
+
+// thumbnail: its own layout. It is the video's opening frames (so any preview shows it) and, at
+// video.html#thumb, the separate thumbnail image that render.py also embeds as the MP4 cover.
+function buildThumb(parent) {
+  el("div", "abs", `<div class="eyebrow" style="font-size:22px">Supplier catalogue automation · FCI London</div>
+    <div class="display" style="font-size:150px;line-height:.95;margin-top:22px">2,340 price rows.<br><span style="color:var(--terra)">1 command.</span></div>
+    <div class="body" style="font-size:30px;margin-top:26px;color:var(--ink)">PDF &amp; Excel price lists → FCI's 6 upload sheets, full-quality images,<br>a Google Drive workspace and an assistant that checks its numbers.</div>`, parent, px({ left: 110, top: 150, width: 1200 }));
+  ["burt", "richard", "thomas"].forEach((k, i) => el("div", "card abs", null, parent, px({ left: 1340, top: 150 + i * 250, width: 470, height: 230, background: `#fff url(assets/${D.images[k][0]}) center/cover` })));
+  el("div", "abs", `<span style="display:inline-block;width:64px;height:64px;border-radius:50%;vertical-align:middle;background:url(assets/creator/prateek.jpg) center/cover;margin-right:16px;border:3px solid var(--paper)"></span><span style="font:500 26px var(--sans);vertical-align:middle">Prateek Sahni</span>`, parent, px({ left: 110, top: 905 }));
+  el("div", "chip abs", "✓ €7,192 · checked against the data", parent, px({ left: 560, top: 912, fontSize: 22 }));
+}
+if (location.hash === "#thumb") {
+  stage.querySelectorAll(".scene, #cap, #progress, #wipe").forEach(e => e.remove());
+  chapterEl.innerHTML = "<b>Demo</b>Round 2 · technical assessment";
+  buildThumb(stage);
+} else {
+  const cover = el("div", "abs", null, stage, px({ inset: 0, zIndex: 7, background: "inherit" }));
+  cover.style.background = getComputedStyle(stage).background;
+  buildThumb(cover);
+  at(cover, [{ opacity: 1 }, { opacity: 0 }], 1.25, .45, "ease-in-out", "forwards");
+  tickers.push(t => { cover.style.visibility = t < 1.75 ? "visible" : "hidden"; });
+}
+
+// ---- public API for the renderer
+window.SFX = SFX.sort((a, b) => a.t - b.t);
+window.seek = t => { for (const a of anims) a.currentTime = t * 1000; for (const f of tickers) f(t); };
+window.seek(0);
+window.READY = document.fonts.ready.then(() => Promise.all([...document.querySelectorAll("*")].flatMap(e => {
+  const m = getComputedStyle(e).backgroundImage.match(/url\("?([^")]+)"?\)/g) || [];
+  return m.map(u => new Promise(res => { const i = new Image(); i.onload = i.onerror = res; i.src = u.slice(4, -1).replace(/"/g, ""); }));
+})));
+</script>
+</body>
+</html>

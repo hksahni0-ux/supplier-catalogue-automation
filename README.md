@@ -3,7 +3,12 @@
 A Python pipeline that takes a supplier's price list, swatch documents and website and
 produces FCI's six import CSVs, web-ready product images and swatch images, plus a report
 listing everything a person should check. It was built for the two assessment products, and
-a third product (Thomas) was added with a job file only, to show reuse:
+a third product (Thomas) was added to show reuse: a job file, plus one general rule for the
+feet-finish note its price table carries (now a Structure option for any product).
+
+Around the pipeline there is a team workspace: price lists and a products sheet in Google
+Drive, results saved back to Drive by date, a price-change report on every re-run, and a web
+page where anyone can ask an assistant about the results or start a re-run.
 
 | Product | Supplier source | FCI code | Base price | Combinations | Images |
 |---|---|---|---|---|---|
@@ -38,6 +43,72 @@ Options: `--offline` (use only cached web responses), `--no-images`, `--no-ai`.
 Product descriptions are written by NVIDIA Nemotron 3.5 Super when `NVIDIA_API_KEY` is in
 `.env` (see `.env.example`). Without a key, the supplier's own text is used and flagged for
 review.
+
+To check a prices CSV by hand, collapse it back to the supplier's table:
+
+```bash
+uv run fci grid output/cattelan-italia-889/csv/cattelan-italia-889-prices.csv
+# 2340 rows, 10 sizes, 65 distinct prices to check against the price list
+#   A - W.245 X D.234 X H.102 cm
+#      4121    18 covers  ECP01 BIANCO … ECP83 ARGILLA
+#      4498   124 covers  B240 … B208
+#   ...
+```
+
+Every cover in a price group shares one supplier price, so the 2,340 Richard rows reduce to the
+70 cells printed on p.358 (65 distinct, because "Fabric / Micro nubuck" and "Fabric B Sofas"
+carry the same price in every size).
+
+## The shared workspace (Google Drive)
+
+The team works in one Drive folder instead of job files:
+
+```
+FCI Catalogue/
+  Price lists/
+    Cattelan Italia/      the supplier's files; the newest one matching the brand's pattern is used
+    Franco Ferri/
+  Products                a Google Sheet: one row per product (tabs Products, Layouts, Options)
+  Outputs/
+    2026-11-01/<sku>/     the six CSVs, images, swatches.zip, report, price changes
+```
+
+```bash
+uv run fci workspace                 # every active product in the sheet
+uv run fci workspace --only cattelan-italia-806 --publish
+```
+
+A run reads the sheet, copies down only the price lists that changed, runs each product,
+compares its prices with the previous run and publishes the results to `Outputs/<date>/<sku>/`.
+Files that haven't changed are skipped, and changed ones are replaced, so a re-run never
+duplicates anything.
+- **A new catalogue** from a known supplier: drop it into that supplier's folder. It is
+  picked up by its file name (e.g. `CATTELAN ITALIA p.list*.pdf`), with no setup change.
+- **Price changes:** each re-run writes `price-changes.md` and `<sku>-prices-changed.csv`,
+  which holds only the rows that changed or are new, ready to upload. Re-running Thomas gives
+  "no price changes (560 unchanged)".
+- **Access:** Drive, Sheets and Gmail are reached through Composio with the app's own
+  connections (`config/drive.yaml` holds the folder and sheet ids; keys stay in `.env`).
+
+## The assistant and web page
+
+```bash
+cd web && npm ci && npm run build && cd ..
+uv run fci serve --port 8000          # http://localhost:8000
+uv run fci ask "What does Richard size D cost in glove leather?"
+```
+
+- **Sign-in** is by an emailed link (Gmail), valid for 15 minutes and usable once. Requests
+  are rate-limited, and `FCI_OPERATORS` limits who may start runs (emails or `@domain`).
+- **The assistant** (NVIDIA Nemotron with tools) answers only from the run results: products,
+  prices by size and cover, options, review items, price changes and Drive links. Every
+  price-like number in an answer must appear in the data it looked up. If one doesn't, the
+  answer is corrected once and otherwise replaced, and the page marks checked answers "Checked
+  against the data".
+- **Runs:** asking for a re-run only proposes it. Nothing happens until someone presses
+  Confirm. The run then re-prices from Drive and saves the results back. One run happens
+  at a time.
+- **The page** is React (Vite, TypeScript), served by the same FastAPI app.
 
 ## What a person supplies
 
@@ -120,7 +191,10 @@ each image's source and status, and every flag at error, warning or info level.
 
 ## Adding a supplier or product
 
-- **New product from an existing supplier:** a new job file, typically 7 lines.
+- **New product from an existing supplier:** a row in the Products sheet (or a job file,
+  typically 7 lines).
+- **New supplier, in Drive:** a folder under `Price lists/` named after the brand (or the
+  brand YAML's `drive_folder`). It is found by name, so no id is configured.
 - **New supplier with a familiar format** (grid PDF or module spreadsheet): a brand YAML
   that maps price columns to material groups and names the files.
 - **New format:** one adapter in `src/fci/adapters/`, plus a `collect_*` function in
@@ -162,6 +236,12 @@ seconds (Richard, including 356 swatch downloads); repeat runs use the cache.
   same price as Cattelan's own fabrics. The pipeline includes them.
 
 ## Limitations and open points
+
+- **Workspace account.** Without access to FCI's Drive, the workspace runs on my own Google
+  account. Moving it means sharing a Drive folder and reconnecting the three Composio
+  connections.
+- **Not built yet:** the scheduled re-pricing run with an email summary (it would reuse the
+  workspace run), and hosting. The web page runs locally.
 
 - **Category codes.** Only `FUR-BED-DB` and `ACC-MIR` are known for certain. The sofa
   code is inferred and flagged, and a list of FCI's category codes would remove this step.
@@ -206,12 +286,16 @@ Several Cattelan swatches carry the supplier's "NEW" ribbon.
 
 ## Quality checks
 
-`uv run pytest` runs 125 tests at 94% coverage, all offline:
-- unit tests for every adapter and rule;
+`uv run pytest` runs 190 tests at 89% coverage, all offline, and `npm test` in `web/` runs
+7 tests of the page:
+- unit tests for every adapter and rule, the Drive sync, the assistant's tools and number
+  check, and the web app's sign-in, rate limits and runs;
+- an end-to-end workspace run against an in-memory Drive;
 - a golden test against FCI's Thomas sample;
 - end-to-end runs of the Richard and Burt jobs from saved fixtures;
 - real-file tests that run when `supplier_inputs/` is present.
 
-Also: `ruff` (lint and format), `mypy`, `bandit` and `pip-audit`. CI is in
-`.github/workflows/ci.yml`. Test fixtures can be rebuilt from the supplier files with
+Also: `ruff` (lint and format), `mypy`, `bandit` and `pip-audit`. CI
+(`.github/workflows/ci.yml`) runs all of it, plus the web page's type check, tests, build and
+`npm audit`, on every push. Test fixtures can be rebuilt from the supplier files with
 `tests/fixtures/build_fixtures.py`.

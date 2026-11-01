@@ -12,6 +12,10 @@ dependencies = [
     "requests>=2.32",
     "beautifulsoup4>=4.12",
     "pyyaml>=6.0",
+    "composio>=0.30.0",
+    "fastapi>=0.162.0",
+    "uvicorn>=0.54.0",
+    "itsdangerous>=2.2.0",
 ]
 
 [project.scripts]
@@ -27,6 +31,7 @@ dev = [
     "types-PyYAML",
     "pip-audit>=2.7",
     "bandit>=1.7",
+    "httpx>=0.28.1",
 ]
 
 [build-system]
@@ -38,6 +43,7 @@ packages = ["src/fci"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 markers = [
     "integration: needs the real supplier files in supplier_inputs/",
 ]

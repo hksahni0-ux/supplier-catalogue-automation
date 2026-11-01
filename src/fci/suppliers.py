@@ -21,6 +21,7 @@ from fci.adapters.franco_ferri_xlsm import FrancoFerriPriceList
 from fci.adapters.web_common import SupplierPage
 from fci.brands import Brand
 from fci.http import Http
+from fci.inputs import resolve_input
 from fci.jobs import Job
 from fci.mapping import build_options
 from fci.model import Flag, ProductOptions
@@ -60,7 +61,7 @@ def _check_name(job: Job, page: SupplierPage) -> list[Flag]:
 
 
 def collect_cattelan(job: Job, brand: Brand, ctx: Context) -> SupplierData:
-    price_file = ctx.inputs / brand.price_list["file"]
+    price_file = resolve_input(ctx.inputs, brand.price_list)
     price_list = CattelanPriceList(price_file)
     entry = price_list.find(job.supplier_name)
     endpoint = brand.swatches["endpoint"]
@@ -86,8 +87,8 @@ def collect_cattelan(job: Job, brand: Brand, ctx: Context) -> SupplierData:
 
 
 def collect_franco_ferri(job: Job, brand: Brand, ctx: Context) -> SupplierData:
-    price_file = ctx.inputs / brand.price_list["file"]
-    card_file = ctx.inputs / brand.swatches["file"]
+    price_file = resolve_input(ctx.inputs, brand.price_list)
+    card_file = resolve_input(ctx.inputs, brand.swatches)
     entry = FrancoFerriPriceList(price_file).find(job.supplier_name)
     card = FrancoFerriSwatchCard(card_file)
     layouts = [

@@ -14,3 +14,6 @@ supplier_inputs/
 # Outputs: keep the CSVs, reports and processed images; the large re-creatable sets stay out.
 output/*/originals/
 output/*/swatches/
+.DS_Store
+# Drive mirror built by `fci workspace`
+.workspace/

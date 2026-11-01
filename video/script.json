@@ -1,0 +1,72 @@
+{
+  "voice": "en-US-AndrewNeural",
+  "rate": "+4%",
+  "gap": 0.45,
+  "tail": 2.5,
+  "scenes": [
+    {
+      "id": "hook",
+      "text": "3 products. 6 upload sheets each. 1 command. And an assistant your team can ask. This is supplier catalogue automation, built for FCI London."
+    },
+    {
+      "id": "pain",
+      "text": "By hand, the Richard bed means finding it in a 373-page price list, then typing 2,340 price rows."
+    },
+    {
+      "id": "run",
+      "text": "Here, the suppliers' own files go in: Cattelan's PDF price list, and Franco Ferri's spreadsheet and swatch card. A short job file names the product, and 1 command does the rest."
+    },
+    {
+      "id": "richard",
+      "text": "Richard's page holds 70 prices: 5 sizes, 10 cover columns, and a storage version. Cattelan's online catalogue supplies the 356 colours behind those columns. So 70 prices become 2,340 rows, copied exactly."
+    },
+    {
+      "id": "burt",
+      "text": "Burt is modular, so each layout is the sum of its modules. 698, plus 320, plus 564, plus 731: £2,313."
+    },
+    {
+      "id": "images",
+      "text": "Photos stay at the supplier's full resolution, cropped square and saved with the supplier's own JPEG settings. Measured against the originals, every photo scores between 56 and 65 decibels: visually identical, even zoomed in."
+    },
+    {
+      "id": "swatches",
+      "text": "Cattelan's swatches are downloaded. Franco Ferri publishes none, so the tool reuses the 162 FCI already hosts, and lists the 34 still needed."
+    },
+    {
+      "id": "copy",
+      "text": "NVIDIA's Nemotron writes the descriptions from the supplier's facts, and each one is checked before it's used."
+    },
+    {
+      "id": "thomas",
+      "text": "To test it, I added Thomas, a bed FCI built by hand. Every size matches, the base price matches FCI's live page, and it found 41 colours FCI still lists that Cattelan no longer offers."
+    },
+    {
+      "id": "drive",
+      "text": "The team works in Google Drive. Price lists go in a folder, and products are rows in a sheet. A new catalogue is picked up by its name, with no setup change, and every result is saved back to Drive, by date."
+    },
+    {
+      "id": "changes",
+      "text": "Each run compares every price with the last one, and writes only the rows that changed, ready to upload. Re-running Thomas: 560 unchanged."
+    },
+    {
+      "id": "assistant",
+      "text": "And anyone can just ask. The assistant answers from the run results, never from memory. Richard, size D, in glove leather: 3 prices, each checked against the data."
+    },
+    {
+      "id": "confirm",
+      "text": "Asking it to re-run a product only proposes the run. Nothing happens until someone presses Confirm. Then it re-prices from Drive, and saves the results back."
+    },
+    {
+      "id": "verify",
+      "text": "Anything a person should check goes into a report. One command folds the rows back into the 70 prices on the PDF page for a quick hand check, and 192 tests run on every push."
+    },
+    {
+      "id": "close",
+      "text": "85 to 90 percent of the work, automated. A new product is a row in a sheet, and a new supplier is a new reader."
+    },
+    {
+      "id": "creator",
+      "text": "Designed and built by Prateek Sahni. Scan the QR code to visit his website, and explore more of his work."
+    }
+  ]
+}

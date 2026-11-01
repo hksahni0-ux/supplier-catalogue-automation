@@ -8,6 +8,7 @@ currency: EUR
 price_list:
   adapter: cattelan_pdf
   file: "CATTELAN ITALIA p.list 05-26 EUR Vat excl.pdf"
+  match: "CATTELAN ITALIA p.list*.pdf"   # newest matching file wins: a new catalogue needs no config change
 
 website:
   adapter: cattelan_web

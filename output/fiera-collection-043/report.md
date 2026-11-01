@@ -1,6 +1,6 @@
 # Burt Corner Sofa (fiera-collection-043)
 
-Generated 2026-10-31 22:57 UTC.
+Generated 2026-10-31 23:45 UTC.
 
 ## Output
 
@@ -37,6 +37,7 @@ Only the job file. Every other value was extracted, derived or flagged by the pi
 - Leather and Fabric Swatches - Feet Finish - Contrast Stitching - Franco Ferri Italia 2025.xls
 - https://francoferri.it/en/berte/
 - https://francoferri.it/pdf/berte.pdf
+- https://www.fcilondon.co.uk/products/burt-corner-sofa-by-fiera-collection.html
 
 ## Flags (9)
 

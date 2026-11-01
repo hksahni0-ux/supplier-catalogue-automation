@@ -1,0 +1,17 @@
+# Google Drive layout used by the web app and the scheduler (reached through Composio).
+# IDs, not names: Drive allows duplicate names. Owner: sprateek11294@gmail.com (demo account).
+account: sprateek11294@gmail.com
+root: 1FCCXXaj1tBWzKxnFtf0TlW3AACZsfsfo            # FCI Catalogue
+# One subfolder per supplier, found by name: the brand config's drive_folder, else its brand name.
+price_lists: 1SP0y45ChLzBATm9IU0CusELE8Ndxngms     # FCI Catalogue/Price lists
+outputs: 13hJbKfDRDrbEhtS0F_y-6devmPNImjeq         # FCI Catalogue/Outputs
+products_sheet: 1py1t1O1avZ1zCaZc3wv3qdrrhpcb9ttoPiENre0pUKw   # tabs: Products, Layouts, Options
+
+# Composio: the app's own connections (user "fci-catalogue" in the Composio project whose key
+# is COMPOSIO_API_KEY in .env), all signed in as sprateek11294@gmail.com.
+composio:
+  user_id: fci-catalogue
+  accounts:
+    googledrive: ca_ao04pXDgTUMw
+    googlesheets: ca_6RVqz_3vB23T
+    gmail: ca_UvGCi3fSwRM3

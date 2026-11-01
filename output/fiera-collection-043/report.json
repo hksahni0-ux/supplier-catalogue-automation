@@ -1,7 +1,7 @@
 {
   "product": "Burt Corner Sofa",
   "sku": "fiera-collection-043",
-  "generated": "2026-10-31 22:57 UTC",
+  "generated": "2026-10-31 23:45 UTC",
   "base_price": 1650,
   "price_range": [
     1650,
@@ -91,7 +91,8 @@
     "2026 - Franco Ferri GBP Price List IW - FCI Clipper Design - June 2026.xlsm (row 519)",
     "Leather and Fabric Swatches - Feet Finish - Contrast Stitching - Franco Ferri Italia 2025.xls",
     "https://francoferri.it/en/berte/",
-    "https://francoferri.it/pdf/berte.pdf"
+    "https://francoferri.it/pdf/berte.pdf",
+    "https://www.fcilondon.co.uk/products/burt-corner-sofa-by-fiera-collection.html"
   ],
   "csv_files": {
     "product": "csv/fiera-collection-043-product-upload.csv",

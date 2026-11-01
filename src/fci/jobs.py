@@ -23,24 +23,30 @@ class Job:
     path: Path | None = None
 
 
-def load_job(path: Path | str) -> Job:
-    path = Path(path)
-    data = yaml.safe_load(path.read_text())
-    known = {
-        "brand",
-        "model",
-        "supplier_name",
-        "product_type",
-        "category_code",
-        "sku",
-        "supplier_url",
-        "category_confirmed",
-    }
-    missing = sorted(k for k in known - {"category_confirmed"} if not data.get(k))
+KNOWN = {
+    "brand",
+    "model",
+    "supplier_name",
+    "product_type",
+    "category_code",
+    "sku",
+    "supplier_url",
+    "category_confirmed",
+}
+
+
+def job_from_dict(data: dict[str, Any], source: str, path: Path | None = None) -> Job:
+    """Build a job from its fields, wherever they were written (a YAML file or a sheet row)."""
+    missing = sorted(k for k in KNOWN - {"category_confirmed"} if not data.get(k))
     if missing:
-        raise ValueError(f"{path.name}: missing required fields {missing}")
+        raise ValueError(f"{source}: missing required fields {missing}")
     return Job(
-        **{k: data[k] for k in known if k in data},
-        options={k: v for k, v in data.items() if k not in known},
+        **{k: data[k] for k in KNOWN if k in data},
+        options={k: v for k, v in data.items() if k not in KNOWN},
         path=path,
     )
+
+
+def load_job(path: Path | str) -> Job:
+    path = Path(path)
+    return job_from_dict(yaml.safe_load(path.read_text()), path.name, path)

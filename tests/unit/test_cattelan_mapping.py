@@ -139,3 +139,11 @@ def test_sizes_with_identical_printed_dimensions_are_flagged(richard) -> None:
     flagged = [f for f in richard.flags if f.field == "Size" and "identical" in f.message]
     assert len(flagged) == 2  # A/B standard and A/B pull-up
     assert "A" in flagged[0].message and "B" in flagged[0].message
+
+
+def test_drive_folder_defaults_to_the_brand_name(brand) -> None:
+    assert brand.drive_folder == "Cattelan Italia"
+
+
+def test_drive_folder_can_be_named_in_the_brand_config() -> None:
+    assert load_brand(CONFIG / "brands" / "fiera-collection.yaml").drive_folder == "Franco Ferri"

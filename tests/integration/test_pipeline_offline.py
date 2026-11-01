@@ -136,3 +136,6 @@ def test_burt_end_to_end(workspace) -> None:
     assert not any("technical" in m["source"] for m in report["images"])
     assert any(f["field"] == "images" and "branding" in f["message"] for f in report["flags"])
     assert any(f["field"] == "catcode" for f in report["flags"])
+    # every web call is listed, including FCI's page used for swatch reuse
+    fci_page = "https://www.fcilondon.co.uk/products/burt-corner-sofa-by-fiera-collection.html"
+    assert fci_page in report["sources"]
